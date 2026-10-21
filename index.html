@@ -9,6 +9,42 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
+        :root {
+            --bg-color: #060a12;
+            --card-bg: linear-gradient(145deg, #0b1326 0%, #06101e 100%);
+            --card-border: rgba(0, 242, 254, 0.25);
+            --text-main: #ffffff;
+            --text-sub: #7d93b8;
+            --accent-cyan: #00f2fe;
+            --btn-bg: #0b1326;
+            --panel-bg: #0b1326;
+            --tile-bg: #06101e;
+        }
+
+        body.theme-dark {
+            --bg-color: #020305;
+            --card-bg: linear-gradient(145deg, #080a0f 0%, #030407 100%);
+            --card-border: rgba(0, 180, 216, 0.2);
+            --text-main: #e6f1ff;
+            --text-sub: #5c6b8a;
+            --accent-cyan: #00b4d8;
+            --btn-bg: #080a0f;
+            --panel-bg: #080a0f;
+            --tile-bg: #04060a;
+        }
+
+        body.theme-light {
+            --bg-color: #f0f4f8;
+            --card-bg: linear-gradient(145deg, #ffffff 0%, #e2e8f0 100%);
+            --card-border: rgba(0, 119, 182, 0.3);
+            --text-main: #0f172a;
+            --text-sub: #475569;
+            --accent-cyan: #0077b6;
+            --btn-bg: #ffffff;
+            --panel-bg: #ffffff;
+            --tile-bg: #f8fafc;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -19,8 +55,8 @@
         }
 
         body {
-            background-color: #060a12;
-            color: #ffffff;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -29,6 +65,7 @@
             padding: 16px;
             overflow-x: hidden;
             position: relative;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         #starCanvas {
@@ -51,21 +88,39 @@
 
         /* Главная карточка энергии */
         .core-card {
-            background: linear-gradient(145deg, #0b1326 0%, #06101e 100%);
-            border: 1px solid rgba(0, 242, 254, 0.25);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 20px;
             padding: 18px;
             text-align: center;
             position: relative;
-            box-shadow: 0 8px 32px rgba(0, 242, 254, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 242, 254, 0.12);
         }
+
+        .settings-btn {
+            position: absolute;
+            top: 12px; left: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            width: 32px; height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .settings-btn:active { transform: scale(0.9); }
 
         .ad-counter {
             position: absolute;
-            top: 14px; right: 14px;
+            top: 12px; right: 12px;
             font-size: 9px;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-sub);
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 4px 8px;
@@ -76,11 +131,11 @@
 
         .card-label {
             font-size: 10px;
-            color: #7d93b8;
+            color: var(--text-sub);
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 4px;
+            margin-top: 6px;
             margin-bottom: 4px;
         }
 
@@ -88,17 +143,17 @@
             font-family: 'Unbounded', sans-serif;
             font-size: 28px;
             font-weight: 800;
-            color: #ffffff;
+            color: var(--text-main);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            text-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+            text-shadow: 0 0 20px var(--accent-cyan);
         }
 
         .passive-income {
             font-size: 11px;
-            color: #00f2fe;
+            color: var(--accent-cyan);
             font-weight: 700;
             margin-top: 4px;
         }
@@ -112,9 +167,9 @@
         }
 
         .tab-btn {
-            background: #0b1326;
+            background: var(--btn-bg);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #7d93b8;
+            color: var(--text-sub);
             padding: 10px 2px;
             border-radius: 12px;
             font-size: 10px;
@@ -145,7 +200,7 @@
 
         /* Генератор энергии */
         .reactor-area {
-            background: #0b1326;
+            background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 20px;
             padding: 26px 20px;
@@ -153,7 +208,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             position: relative;
             min-height: 270px;
         }
@@ -182,10 +237,10 @@
             font-family: 'Unbounded', sans-serif;
             font-size: 18px;
             font-weight: 800;
-            color: #00f2fe;
+            color: var(--accent-cyan);
             pointer-events: none;
             animation: floatUp 0.8s ease-out forwards;
-            text-shadow: 0 0 10px rgba(0, 242, 254, 0.8);
+            text-shadow: 0 0 10px var(--accent-cyan);
         }
 
         @keyframes floatUp {
@@ -196,19 +251,19 @@
         .boost-banner {
             width: 100%;
             background: rgba(0, 242, 254, 0.1);
-            border: 1px solid #00f2fe;
+            border: 1px solid var(--accent-cyan);
             border-radius: 12px;
             padding: 10px;
             text-align: center;
             font-size: 11px;
-            color: #00f2fe;
+            color: var(--accent-cyan);
             font-weight: 700;
             display: none;
         }
 
-        /* Рулетка (Колесо) */
+        /* Рулетка */
         .wheel-container {
-            background: #0b1326;
+            background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 20px;
             padding: 20px;
@@ -220,93 +275,72 @@
 
         .wheel-wrap {
             position: relative;
-            width: 240px;
-            height: 240px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 240px; height: 240px;
+            display: flex; align-items: center; justify-content: center;
         }
 
         #wheelCanvas {
-            width: 240px;
-            height: 240px;
+            width: 240px; height: 240px;
             border-radius: 50%;
             box-shadow: 0 0 30px rgba(0, 242, 254, 0.25);
         }
 
         .wheel-pointer {
-            position: absolute;
-            top: -12px;
-            left: 50%;
+            position: absolute; top: -12px; left: 50%;
             transform: translateX(-50%);
-            width: 0;
-            height: 0;
+            width: 0; height: 0;
             border-left: 12px solid transparent;
             border-right: 12px solid transparent;
-            border-top: 20px solid #ffffff;
-            filter: drop-shadow(0 2px 6px rgba(0, 242, 254, 0.8));
+            border-top: 20px solid var(--text-main);
+            filter: drop-shadow(0 2px 6px var(--accent-cyan));
             z-index: 10;
         }
 
         .spin-btn {
             background: linear-gradient(135deg, #00c6ff, #0072ff);
-            border: none;
-            color: #ffffff;
+            border: none; color: #ffffff;
             padding: 12px 24px;
             border-radius: 12px;
             font-family: 'Unbounded', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 12px; font-weight: 700;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0, 198, 255, 0.4);
             transition: 0.2s;
         }
 
         .spin-btn:disabled {
-            background: #101929;
-            color: #3b4e6b;
-            box-shadow: none;
-            cursor: not-allowed;
+            background: #101929; color: #3b4e6b;
+            box-shadow: none; cursor: not-allowed;
         }
 
         /* Рейтинг Игроков */
         .leaderboard-panel {
-            background: #0b1326;
+            background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 20px;
             padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: flex; flex-direction: column; gap: 10px;
         }
 
         .leader-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #06101e;
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--tile-bg);
             padding: 10px 12px;
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .leader-row.me {
-            border-color: #00f2fe;
+            border-color: var(--accent-cyan);
             background: rgba(0, 242, 254, 0.08);
         }
 
-        .leader-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .leader-left { display: flex; align-items: center; gap: 10px; }
 
         .rank-num {
             font-family: 'Unbounded', sans-serif;
-            font-size: 12px;
-            font-weight: 800;
-            width: 22px;
-            color: #7d93b8;
+            font-size: 12px; font-weight: 800;
+            width: 22px; color: var(--text-sub);
         }
 
         .rank-1 { color: #ffd700; }
@@ -314,105 +348,124 @@
         .rank-3 { color: #cd7f32; }
 
         .avatar-badge {
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, #00c6ff, #0072ff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 800;
-            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 800; color: #fff;
         }
 
-        .leader-name {
-            font-size: 12px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
+        .leader-name { font-size: 12px; font-weight: 700; color: var(--text-main); }
         .leader-val {
             font-family: 'Unbounded', sans-serif;
-            font-size: 11px;
-            font-weight: 700;
-            color: #00f2fe;
+            font-size: 11px; font-weight: 700; color: var(--accent-cyan);
         }
 
-        /* Прокачка */
+        /* Модули и Бустеры */
         .panel-box {
-            background: #0b1326;
+            background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 18px;
             padding: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: flex; flex-direction: column; gap: 10px;
         }
 
         .upgrade-tile {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #06101e;
-            padding: 12px;
-            border-radius: 14px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--tile-bg);
+            padding: 12px; border-radius: 14px;
             border: 1px solid rgba(0, 242, 254, 0.15);
         }
 
         .upgrade-title { font-size: 12px; font-weight: 700; }
-        .upgrade-sub { font-size: 10px; color: #00f2fe; font-weight: 600; margin-top: 2px; }
+        .upgrade-sub { font-size: 10px; color: var(--accent-cyan); font-weight: 600; margin-top: 2px; }
 
         .buy-btn {
             background: linear-gradient(135deg, #00c6ff, #0072ff);
-            border: none;
-            color: #ffffff;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
+            border: none; color: #ffffff;
+            padding: 8px 14px; border-radius: 10px;
+            font-size: 11px; font-weight: 700; cursor: pointer;
         }
 
-        .buy-btn:disabled {
-            background: #101929;
-            color: #3b4e6b;
-            cursor: not-allowed;
-        }
+        .buy-btn:disabled { background: #101929; color: #3b4e6b; cursor: not-allowed; }
 
-        /* Рекламные бустеры */
         .ad-card {
-            background: #06101e;
+            background: var(--tile-bg);
             border: 1px solid rgba(0, 242, 254, 0.2);
-            border-radius: 14px;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            border-radius: 14px; padding: 14px;
+            display: flex; flex-direction: column; gap: 8px;
         }
 
-        .ad-title { font-size: 12px; font-weight: 700; color: #ffffff; }
-        .ad-desc { font-size: 10px; color: #7d93b8; }
+        .ad-title { font-size: 12px; font-weight: 700; color: var(--text-main); }
+        .ad-desc { font-size: 10px; color: var(--text-sub); }
 
         .ad-btn {
-            background: #00f2fe;
-            color: #060a12;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 800;
-            cursor: pointer;
-            text-align: center;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            background: var(--accent-cyan);
+            color: #060a12; border: none;
+            padding: 10px; border-radius: 10px;
+            font-size: 11px; font-weight: 800; cursor: pointer;
+            text-align: center; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
         }
 
         .status-output {
-            font-size: 11px;
-            font-weight: 600;
-            color: #7d93b8;
-            text-align: center;
-            min-height: 16px;
+            font-size: 11px; font-weight: 600; color: var(--text-sub);
+            text-align: center; min-height: 16px;
+        }
+
+        /* Модалка Настроек ⚙️ */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 200; padding: 20px;
+        }
+
+        .modal-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px; width: 100%; max-width: 340px;
+            display: flex; flex-direction: column; gap: 14px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .modal-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 14px; font-weight: 800;
+            text-align: center; color: var(--accent-cyan);
+        }
+
+        .setting-section-title {
+            font-size: 11px; font-weight: 700; color: var(--text-sub);
+            margin-bottom: 6px; text-transform: uppercase;
+        }
+
+        .options-group {
+            display: flex; flex-direction: column; gap: 6px;
+        }
+
+        .option-item {
+            background: var(--tile-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 12px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; font-size: 12px; font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .option-item.selected {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.08);
+        }
+
+        .close-modal-btn {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none; color: #fff;
+            padding: 12px; border-radius: 12px;
+            font-weight: 700; font-size: 12px; cursor: pointer;
+            margin-top: 6px; text-align: center;
         }
     </style>
 </head>
@@ -424,13 +477,15 @@
         
         <!-- Верхний Баланс -->
         <div class="core-card">
+            <div class="settings-btn" onclick="toggleSettingsModal(true)">⚙️</div>
+
             <div class="ad-counter" id="adCounter">
                 Сегодня: 0<br>Всего: 0
             </div>
 
-            <div class="card-label">Энергия Astra</div>
+            <div class="card-label" id="lblEnergy">Энергия Astra</div>
             <div class="main-balance">
-                <span style="color:#00f2fe">✦</span>
+                <span style="color:var(--accent-cyan)">✦</span>
                 <span id="balanceVal">0</span>
             </div>
             <div class="passive-income" id="passiveVal">+0 ✦/сек</div>
@@ -440,20 +495,19 @@
 
         <!-- Навигация -->
         <div class="nav-tabs">
-            <button class="tab-btn active" id="tabCore" onclick="switchTab('core')">⚛️ Ядро</button>
-            <button class="tab-btn" id="tabWheel" onclick="switchTab('wheel')">🎰 Колесо</button>
-            <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">🔬 Модули</button>
-            <button class="tab-btn" id="tabTop" onclick="switchTab('top')">🏆 Топ</button>
-            <button class="tab-btn" id="tabBoost" onclick="switchTab('boost')">🎁 Бонусы</button>
+            <button class="tab-btn active" id="tabCore" onclick="switchTab('core')">⚛️ <span id="navCore">Ядро</span></button>
+            <button class="tab-btn" id="tabWheel" onclick="switchTab('wheel')">🎰 <span id="navWheel">Колесо</span></button>
+            <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">🔬 <span id="navShop">Модули</span></button>
+            <button class="tab-btn" id="tabTop" onclick="switchTab('top')">🏆 <span id="navTop">Топ</span></button>
+            <button class="tab-btn" id="tabBoost" onclick="switchTab('boost')">🎁 <span id="navBoost">Бонусы</span></button>
         </div>
 
         <!-- 1. ЯДРО (ГЕНЕРАТОР) -->
         <div id="viewCore" class="view-layer active">
-            <div class="boost-banner" id="boostBanner">⚡ Овердрайв Активен! Доход х2 (<span id="boostTime">60</span>с)</div>
+            <div class="boost-banner" id="boostBanner">⚡ <span id="txtBoostActive">Овердрайв Активен! Доход х2</span> (<span id="boostTime">60</span>с)</div>
             
             <div class="reactor-area" id="tapContainer">
                 <div class="core-orb-button" onclick="handleTap(event)">
-                    <!-- Высококачественная векторная монета/ядро -->
                     <svg viewBox="0 0 100 100" width="90" height="90">
                         <defs>
                             <linearGradient id="orbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -481,7 +535,7 @@
         <!-- 2. КОЛЕСО ФОРТУНЫ -->
         <div id="viewWheel" class="view-layer">
             <div class="wheel-container">
-                <div class="card-label">Квантовый Рулетёр</div>
+                <div class="card-label" id="lblWheelTitle">Квантовый Рулетёр</div>
                 <div class="wheel-wrap">
                     <div class="wheel-pointer"></div>
                     <canvas id="wheelCanvas"></canvas>
@@ -493,11 +547,11 @@
         <!-- 3. МОДУЛИ СТАНЦИИ -->
         <div id="viewShop" class="view-layer">
             <div class="panel-box">
-                <div class="card-label">Автоматические Модули</div>
+                <div class="card-label" id="lblModulesTitle">Автоматические Модули</div>
 
                 <div class="upgrade-tile">
                     <div>
-                        <div class="upgrade-title">Ионный Конденсатор</div>
+                        <div class="upgrade-title" id="m1Title">Ионный Конденсатор</div>
                         <div class="upgrade-sub" id="clickLvlText">+1 к заряду (Ур. 1)</div>
                     </div>
                     <button class="buy-btn" id="buyClickBtn" onclick="buyUpgrade('click')">10 ✦</button>
@@ -505,7 +559,7 @@
 
                 <div class="upgrade-tile">
                     <div>
-                        <div class="upgrade-title">Орбитальный Сборщик</div>
+                        <div class="upgrade-title" id="m2Title">Орбитальный Сборщик</div>
                         <div class="upgrade-sub" id="autoLvlText">+1 ✦/сек (Ур. 0)</div>
                     </div>
                     <button class="buy-btn" id="buyAutoBtn" onclick="buyUpgrade('auto')">50 ✦</button>
@@ -513,7 +567,7 @@
 
                 <div class="upgrade-tile">
                     <div>
-                        <div class="upgrade-title">Квантовый Реактор</div>
+                        <div class="upgrade-title" id="m3Title">Квантовый Реактор</div>
                         <div class="upgrade-sub" id="laserLvlText">+5 к заряду (Ур. 0)</div>
                     </div>
                     <button class="buy-btn" id="buyLaserBtn" onclick="buyUpgrade('laser')">250 ✦</button>
@@ -524,7 +578,7 @@
         <!-- 4. РЕЙТИНГ ИГРОКОВ -->
         <div id="viewTop" class="view-layer">
             <div class="leaderboard-panel">
-                <div class="card-label">Топ Исследователей</div>
+                <div class="card-label" id="lblTopTitle">Топ Исследователей</div>
                 <div id="leaderList"></div>
             </div>
         </div>
@@ -532,22 +586,61 @@
         <!-- 5. РЕКЛАМНЫЕ БОНУСЫ -->
         <div id="viewBoost" class="view-layer">
             <div class="panel-box">
-                <div class="card-label">Ускорители Станции</div>
+                <div class="card-label" id="lblBoostTitle">Ускорители Станции</div>
 
                 <div class="ad-card">
-                    <div class="ad-title">⚡ Овердрайв (х2 Энергия)</div>
-                    <div class="ad-desc">Удваивает мощность заряда ядра и генераторов на 60 секунд.</div>
+                    <div class="ad-title" id="b1Title">⚡ Овердрайв (х2 Энергия)</div>
+                    <div class="ad-desc" id="b1Desc">Удваивает мощность заряда ядра и генераторов на 60 секунд.</div>
                     <button class="ad-btn" onclick="watchAdReward('boost')">Активировать x2</button>
                 </div>
 
                 <div class="ad-card">
-                    <div class="ad-title">🎁 Квантовый Грант (+1,000 ✦)</div>
-                    <div class="ad-desc">Мгновенное начисление +1,000 энергии Astra за просмотр ролика.</div>
+                    <div class="ad-title" id="b2Title">🎁 Квантовый Грант (+1,000 ✦)</div>
+                    <div class="ad-desc" id="b2Desc">Мгновенное начисление +1,000 энергии Astra за просмотр ролика.</div>
                     <button class="ad-btn" onclick="watchAdReward('grant')">Забрать +1,000 ✦</button>
                 </div>
             </div>
         </div>
 
+    </div>
+
+    <!-- Модалка Настроек ⚙️ -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-card">
+            <div class="modal-title" id="stgTitle">⚙️ Настройки</div>
+
+            <div>
+                <div class="setting-section-title" id="stgThemeLabel">Тема оформления</div>
+                <div class="options-group">
+                    <div class="option-item" id="thmStandard" onclick="setTheme('standard')">
+                        <span id="thmStdText">🌌 Стандартная</span>
+                    </div>
+                    <div class="option-item" id="thmDark" onclick="setTheme('dark')">
+                        <span id="thmDrkText">🌑 Тёмная</span>
+                    </div>
+                    <div class="option-item" id="thmLight" onclick="setTheme('light')">
+                        <span id="thmLgtText">☀️ Светлая</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="setting-section-title" id="stgLangLabel">Язык интерфейса</div>
+                <div class="options-group">
+                    <div class="option-item" id="langRu" onclick="setLang('ru')">
+                        <span>🇷🇺 Русский</span>
+                    </div>
+                    <div class="option-item" id="langUa" onclick="setLang('ua')">
+                        <span>🇺🇦 Українська</span>
+                    </div>
+                    <div class="option-item" id="langEn" onclick="setLang('en')">
+                        <span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 English</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="close-modal-btn" onclick="toggleSettingsModal(false)" id="stgCloseBtn">Закрыть</button>
+        </div>
     </div>
 
     <script>
@@ -621,7 +714,9 @@
             adsTotal: parseInt(localStorage.getItem('ast_ads_total')) || 0,
             lastDay: localStorage.getItem('ast_last_day') || new Date().toDateString(),
             boostActive: false,
-            boostTimeLeft: 0
+            boostTimeLeft: 0,
+            theme: localStorage.getItem('ast_theme') || 'standard',
+            lang: localStorage.getItem('ast_lang') || 'ru'
         };
 
         if (state.lastDay !== new Date().toDateString()) {
@@ -631,24 +726,97 @@
             localStorage.setItem('ast_ads_today', 0);
         }
 
+        // ЯЗЫКОВОЙ СЛОВАРЬ (i18n)
+        const i18n = {
+            ru: {
+                energy: "Энергия Astra", ready: "Станция готова к работе",
+                navCore: "Ядро", navWheel: "Колесо", navShop: "Модули", navTop: "Топ", navBoost: "Бонусы",
+                boostActive: "Овердрайв Активен! Доход х2", wheelTitle: "Квантовый Рулетёр", spinBtn: "КРУТИТЬ (50 ✦)",
+                modulesTitle: "Автоматические Модули", m1: "Ионный Конденсатор", m2: "Орбитальный Сборщик", m3: "Квантовый Реактор",
+                topTitle: "Топ Исследователей", boostTitle: "Ускорители Станции",
+                b1Title: "⚡ Овердрайв (х2 Энергия)", b1Desc: "Удваивает мощность заряда ядра и генераторов на 60 секунд.",
+                b2Title: "🎁 Квантовый Грант (+1,000 ✦)", b2Desc: "Мгновенное начисление +1,000 энергии Astra за просмотр ролика.",
+                stgTitle: "⚙️ Настройки", stgTheme: "Тема оформления", stgLang: "Язык интерфейса", close: "Закрыть",
+                stdThm: "🌌 Стандартная", drkThm: "🌑 Тёмная", lgtThm: "☀️ Светлая",
+                sec: "/сек", lvl: "Ур.", charge: "к заряду"
+            },
+            ua: {
+                energy: "Енергія Astra", ready: "Станція готова до роботи",
+                navCore: "Ядро", navWheel: "Колесо", navShop: "Модулі", navTop: "Топ", navBoost: "Бонуси",
+                boostActive: "Овердрайв Активний! Дохід х2", wheelTitle: "Квантовий Рулетер", spinBtn: "КРУТИТИ (50 ✦)",
+                modulesTitle: "Автоматичні Модулі", m1: "Іонний Конденсатор", m2: "Орбітальний Збирач", m3: "Квантовий Реактор",
+                topTitle: "Топ Дослідників", boostTitle: "Прискорювачі Станції",
+                b1Title: "⚡ Овердрайв (х2 Енергія)", b1Desc: "Подвоює потужність заряду ядра і генераторів на 60 секунд.",
+                b2Title: "🎁 Квантовий Грант (+1,000 ✦)", b2Desc: "Миттєве нарахування +1,000 енергії Astra за перегляд відео.",
+                stgTitle: "⚙️ Налаштування", stgTheme: "Тема оформлення", stgLang: "Мова інтерфейсу", close: "Закрити",
+                stdThm: "🌌 Стандартна", drkThm: "🌑 Темна", lgtThm: "☀️ Світла",
+                sec: "/сек", lvl: "Рів.", charge: "до заряду"
+            },
+            en: {
+                energy: "Astra Energy", ready: "Station Operational",
+                navCore: "Core", navWheel: "Wheel", navShop: "Modules", navTop: "Top", navBoost: "Boosts",
+                boostActive: "Overdrive Active! Income x2", wheelTitle: "Quantum Spinner", spinBtn: "SPIN (50 ✦)",
+                modulesTitle: "Automatic Modules", m1: "Ionic Capacitor", m2: "Orbital Harvester", m3: "Quantum Reactor",
+                topTitle: "Top Explorers", boostTitle: "Station Boosters",
+                b1Title: "⚡ Overdrive (x2 Energy)", b1Desc: "Doubles core charge and generator power for 60 seconds.",
+                b2Title: "🎁 Quantum Grant (+1,000 ✦)", b2Desc: "Instant credit of +1,000 Astra energy for watching a video.",
+                stgTitle: "⚙️ Settings", stgTheme: "Theme", stgLang: "Language", close: "Close",
+                stdThm: "🌌 Standard", drkThm: "🌑 Dark", lgtThm: "☀️ Light",
+                sec: "/sec", lvl: "Lvl", charge: "charge"
+            }
+        };
+
+        function applyI18n() {
+            const t = i18n[state.lang] || i18n.ru;
+            document.getElementById('lblEnergy').innerText = t.energy;
+            document.getElementById('navCore').innerText = t.navCore;
+            document.getElementById('navWheel').innerText = t.navWheel;
+            document.getElementById('navShop').innerText = t.navShop;
+            document.getElementById('navTop').innerText = t.navTop;
+            document.getElementById('navBoost').innerText = t.navBoost;
+            document.getElementById('txtBoostActive').innerText = t.boostActive;
+            document.getElementById('lblWheelTitle').innerText = t.wheelTitle;
+            document.getElementById('spinBtn').innerText = `${t.spinBtn.split(' ')[0]} (50 ✦)`;
+            document.getElementById('lblModulesTitle').innerText = t.modulesTitle;
+            document.getElementById('m1Title').innerText = t.m1;
+            document.getElementById('m2Title').innerText = t.m2;
+            document.getElementById('m3Title').innerText = t.m3;
+            document.getElementById('lblTopTitle').innerText = t.topTitle;
+            document.getElementById('lblBoostTitle').innerText = t.boostTitle;
+            document.getElementById('b1Title').innerText = t.b1Title;
+            document.getElementById('b1Desc').innerText = t.b1Desc;
+            document.getElementById('b2Title').innerText = t.b2Title;
+            document.getElementById('b2Desc').innerText = t.b2Desc;
+
+            document.getElementById('stgTitle').innerText = t.stgTitle;
+            document.getElementById('stgThemeLabel').innerText = t.stgTheme;
+            document.getElementById('stgLangLabel').innerText = t.stgLang;
+            document.getElementById('stgCloseBtn').innerText = t.close;
+            document.getElementById('thmStdText').innerText = t.stdThm;
+            document.getElementById('thmDrkText').innerText = t.drkThm;
+            document.getElementById('thmLgtText').innerText = t.lgtThm;
+
+            document.getElementById('clickLvlText').innerText = `+1 ${t.charge} (${t.lvl} ${state.clickLvl})`;
+            document.getElementById('autoLvlText').innerText = `+1 ✦${t.sec} (${t.lvl} ${state.autoLvl})`;
+            document.getElementById('laserLvlText').innerText = `+5 ${t.charge} (${t.lvl} ${state.laserLvl})`;
+        }
+
         function syncUI() {
             document.getElementById('balanceVal').innerText = state.balance.toLocaleString();
-            document.getElementById('passiveVal').innerText = `+${state.autoIncome * (state.boostActive ? 2 : 1)} ✦/сек`;
+            const t = i18n[state.lang] || i18n.ru;
+            document.getElementById('passiveVal').innerText = `+${state.autoIncome * (state.boostActive ? 2 : 1)} ✦${t.sec}`;
             document.getElementById('adCounter').innerHTML = `Сегодня: ${state.adsToday}<br>Всего: ${state.adsTotal}`;
 
             let clickCost = Math.floor(10 * Math.pow(1.5, state.clickLvl - 1));
             let autoCost = Math.floor(50 * Math.pow(1.6, state.autoLvl));
             let laserCost = Math.floor(250 * Math.pow(1.7, state.laserLvl));
 
-            document.getElementById('clickLvlText').innerText = `+1 к заряду (Ур. ${state.clickLvl})`;
             document.getElementById('buyClickBtn').innerText = `${clickCost} ✦`;
             document.getElementById('buyClickBtn').disabled = state.balance < clickCost;
 
-            document.getElementById('autoLvlText').innerText = `+1 ✦/сек (Ур. ${state.autoLvl})`;
             document.getElementById('buyAutoBtn').innerText = `${autoCost} ✦`;
             document.getElementById('buyAutoBtn').disabled = state.balance < autoCost;
 
-            document.getElementById('laserLvlText').innerText = `+5 к заряду (Ур. ${state.laserLvl})`;
             document.getElementById('buyLaserBtn').innerText = `${laserCost} ✦`;
             document.getElementById('buyLaserBtn').disabled = state.balance < laserCost;
 
@@ -664,6 +832,34 @@
             localStorage.setItem('ast_ads_total', state.adsTotal);
 
             updateLeaderboard();
+        }
+
+        // ТЕМЫ И НАСТРОЙКИ
+        function setTheme(thm) {
+            state.theme = thm;
+            document.body.className = '';
+            if (thm !== 'standard') document.body.classList.add('theme-' + thm);
+
+            document.getElementById('thmStandard').classList.toggle('selected', thm === 'standard');
+            document.getElementById('thmDark').classList.toggle('selected', thm === 'dark');
+            document.getElementById('thmLight').classList.toggle('selected', thm === 'light');
+
+            localStorage.setItem('ast_theme', thm);
+        }
+
+        function setLang(lng) {
+            state.lang = lng;
+            document.getElementById('langRu').classList.toggle('selected', lng === 'ru');
+            document.getElementById('langUa').classList.toggle('selected', lng === 'ua');
+            document.getElementById('langEn').classList.toggle('selected', lng === 'en');
+
+            localStorage.setItem('ast_lang', lng);
+            applyI18n();
+            syncUI();
+        }
+
+        function toggleSettingsModal(show) {
+            document.getElementById('settingsModal').style.display = show ? 'flex' : 'none';
         }
 
         function handleTap(e) {
@@ -703,6 +899,7 @@
                 let cost = Math.floor(250 * Math.pow(1.7, state.laserLvl));
                 if (state.balance >= cost) { state.balance -= cost; state.clickPower += 5; state.laserLvl++; }
             }
+            applyI18n();
             syncUI();
         }
 
@@ -722,7 +919,7 @@
             if (tab === 'wheel') drawWheel(currentWheelRotation);
         }
 
-        // КОЛЕСО ФОРТУНЫ С HD CANVAS И ТОЧНОЙ МАТЕМАТИКОЙ
+        // КОЛЕСО ФОРТУНЫ С HD CANVAS
         const wheelPrizes = [500, 50, 0, 200, 10, 20, 100, 5];
         const wheelColors = ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92'];
         let isSpinning = false;
@@ -755,7 +952,6 @@
                 ctx.arc(120, 120, 110, startArc, startArc + arc);
                 ctx.fill();
 
-                // Текст секторов
                 ctx.save();
                 ctx.fillStyle = "#ffffff";
                 ctx.font = "800 11px Montserrat";
@@ -768,7 +964,6 @@
                 ctx.restore();
             }
 
-            // Центральный каст
             ctx.beginPath();
             ctx.arc(120, 120, 22, 0, Math.PI * 2);
             ctx.fillStyle = "#06101e";
@@ -795,7 +990,6 @@
                 let elapsed = Date.now() - start;
                 let progress = Math.min(1, elapsed / duration);
                 
-                // Ease-out Quintic
                 let easeProgress = 1 - Math.pow(1 - progress, 5);
                 currentWheelRotation = startAngle + (targetAngle - startAngle) * easeProgress;
 
@@ -806,7 +1000,6 @@
                 } else {
                     isSpinning = false;
                     
-                    // ТОЧНЫЙ РАСЧЕТ ВЫИГРЫША
                     let normalizedAngle = (1.5 * Math.PI - currentWheelRotation) % (Math.PI * 2);
                     if (normalizedAngle < 0) normalizedAngle += Math.PI * 2;
                     let segmentIndex = Math.floor(normalizedAngle / ((Math.PI * 2) / wheelPrizes.length)) % wheelPrizes.length;
@@ -821,36 +1014,63 @@
             requestAnimationFrame(animate);
         }
 
-        // РЕЙТИНГ ИГРОКОВ (ДИНАМИЧЕСКИЙ ТОП)
-        function updateLeaderboard() {
-            const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.first_name : "Игрок (Вы)";
-            
-            let players = [
-                { name: "Alex_Astra", balance: 145000, lvl: "14" },
-                { name: "Ellen_Dev", balance: 98200, lvl: "12" },
-                { name: "Pavel_TON", balance: 64100, lvl: "10" },
-                { name: "StarMiner", balance: 12300, lvl: "5" },
-                { name: "CyberSam", balance: 4150, lvl: "3" },
-                { name: userName, balance: state.balance, lvl: "Вы", isMe: true }
-            ];
+        // РЕАЛЬНЫЙ ОБЛАЧНЫЙ ТОП ЧЕРЕЗ NPOINT.IO
+        async function updateLeaderboard() {
+            const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.first_name : "Исследователь";
+            const API_URL = "https://api.npoint.io/20d5a95c60228eee2787";
 
+            let players = [];
+
+            try {
+                let response = await fetch(API_URL);
+                let data = await response.json();
+                players = data.players || [];
+            } catch (e) {
+                players = [];
+            }
+
+            // Ищем текущего игрока или добавляем
+            let meIndex = players.findIndex(p => p.name === userName);
+            if (meIndex !== -1) {
+                players[meIndex].balance = state.balance;
+            } else {
+                players.push({ name: userName, balance: state.balance });
+            }
+
+            // Сортировка от богатых к новичкам
             players.sort((a, b) => b.balance - a.balance);
+            let top5 = players.slice(0, 5);
+
+            // Отправляем обновленный топ обратно на сервер фоном
+            try {
+                fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ players: top5 })
+                }).catch(() => {});
+            } catch (e) {}
 
             const container = document.getElementById('leaderList');
             container.innerHTML = '';
 
-            players.forEach((p, index) => {
+            if (top5.length === 0) {
+                container.innerHTML = `<div style="text-align:center; font-size:11px; color:var(--text-sub); padding:10px;">Нет данных</div>`;
+                return;
+            }
+
+            top5.forEach((p, index) => {
                 let rank = index + 1;
+                let isMe = (p.name === userName);
                 let row = document.createElement('div');
-                row.className = `leader-row ${p.isMe ? 'me' : ''}`;
+                row.className = `leader-row ${isMe ? 'me' : ''}`;
                 
                 let rankClass = rank === 1 ? 'rank-1' : (rank === 2 ? 'rank-2' : (rank === 3 ? 'rank-3' : ''));
 
                 row.innerHTML = `
                     <div class="leader-left">
                         <div class="rank-num ${rankClass}">#${rank}</div>
-                        <div class="avatar-badge">${p.name.charAt(0)}</div>
-                        <div class="leader-name">${p.name} ${p.isMe ? '👤' : ''}</div>
+                        <div class="avatar-badge">${p.name.charAt(0).toUpperCase()}</div>
+                        <div class="leader-name">${p.name} ${isMe ? '👤' : ''}</div>
                     </div>
                     <div class="leader-val">${p.balance.toLocaleString()} ✦</div>
                 `;
@@ -906,6 +1126,9 @@
             }, 1000);
         }
 
+        // ИНИЦИАЛИЗАЦИЯ
+        setTheme(state.theme);
+        setLang(state.lang);
         initAdsgram();
         syncUI();
         drawWheel(0);
