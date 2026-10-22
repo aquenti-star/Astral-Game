@@ -261,28 +261,55 @@
             display: none;
         }
 
-        /* Рулетка */
+        /* Раздел Колеса */
         .wheel-container {
             background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 20px;
-            padding: 20px;
+            padding: 18px 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
+        }
+
+        .wheel-selector-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            width: 100%;
+        }
+
+        .wheel-type-btn {
+            background: var(--tile-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-sub);
+            padding: 8px 4px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+        }
+
+        .wheel-type-btn.active {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.12);
+            color: var(--text-main);
         }
 
         .wheel-wrap {
             position: relative;
-            width: 240px; height: 240px;
+            width: 230px; height: 230px;
             display: flex; align-items: center; justify-content: center;
+            margin-top: 4px;
         }
 
         #wheelCanvas {
-            width: 240px; height: 240px;
+            width: 230px; height: 230px;
             border-radius: 50%;
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.25);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
         }
 
         .wheel-pointer {
@@ -299,13 +326,14 @@
         .spin-btn {
             background: linear-gradient(135deg, #00c6ff, #0072ff);
             border: none; color: #ffffff;
-            padding: 12px 24px;
+            padding: 12px 20px;
             border-radius: 12px;
             font-family: 'Unbounded', sans-serif;
-            font-size: 12px; font-weight: 700;
+            font-size: 11px; font-weight: 700;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0, 198, 255, 0.4);
             transition: 0.2s;
+            width: 100%;
         }
 
         .spin-btn:disabled {
@@ -411,6 +439,51 @@
             font-size: 11px; font-weight: 600; color: var(--text-sub);
             text-align: center; min-height: 16px;
         }
+
+        /* Оверлей Загрузки Рекламы c Блюром */
+        .ad-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(6, 10, 18, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .ad-loader-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
+            max-width: 320px;
+            width: 100%;
+        }
+
+        .ad-loader-text {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .ad-spinner {
+            width: 36px; height: 36px;
+            border: 3px solid rgba(0, 242, 254, 0.2);
+            border-top: 3px solid var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* Модалка Настроек ⚙️ */
         .modal-overlay {
@@ -532,15 +605,23 @@
             </div>
         </div>
 
-        <!-- 2. КОЛЕСО ФОРТУНЫ -->
+        <!-- 2. КОЛЕСО ФОРТУНЫ (3 ТИПА) -->
         <div id="viewWheel" class="view-layer">
             <div class="wheel-container">
                 <div class="card-label" id="lblWheelTitle">Квантовый Рулетёр</div>
+
+                <!-- Переключатель видов колес -->
+                <div class="wheel-selector-tabs">
+                    <button class="wheel-type-btn" id="wBtnFree" onclick="setWheelMode('free')">🎬 Бесплатно</button>
+                    <button class="wheel-type-btn active" id="wBtnMed" onclick="setWheelMode('medium')">✦ 100</button>
+                    <button class="wheel-type-btn" id="wBtnHigh" onclick="setWheelMode('high')">✦ 1,000</button>
+                </div>
+
                 <div class="wheel-wrap">
                     <div class="wheel-pointer"></div>
                     <canvas id="wheelCanvas"></canvas>
                 </div>
-                <button class="spin-btn" id="spinBtn" onclick="spinWheel()">КРУТИТЬ (50 ✦)</button>
+                <button class="spin-btn" id="spinBtn" onclick="spinWheel()">КРУТИТЬ (100 ✦)</button>
             </div>
         </div>
 
@@ -602,6 +683,14 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Оверлей Загрузки Рекламы -->
+    <div class="ad-overlay" id="adLoadingOverlay">
+        <div class="ad-loader-card">
+            <div class="ad-spinner"></div>
+            <div class="ad-loader-text" id="adLoaderText">Реклама загружается, пожалуйста, подождите...</div>
+        </div>
     </div>
 
     <!-- Модалка Настроек ⚙️ -->
@@ -731,7 +820,7 @@
             ru: {
                 energy: "Энергия Astra", ready: "Станция готова к работе",
                 navCore: "Ядро", navWheel: "Колесо", navShop: "Модули", navTop: "Топ", navBoost: "Бонусы",
-                boostActive: "Овердрайв Активен! Доход х2", wheelTitle: "Квантовый Рулетёр", spinBtn: "КРУТИТЬ (50 ✦)",
+                boostActive: "Овердрайв Активен! Доход х2", wheelTitle: "Квантовый Рулетёр",
                 modulesTitle: "Автоматические Модули", m1: "Ионный Конденсатор", m2: "Орбитальный Сборщик", m3: "Квантовый Реактор",
                 topTitle: "Топ Исследователей", boostTitle: "Ускорители Станции",
                 b1Title: "⚡ Овердрайв (х2 Энергия)", b1Desc: "Удваивает мощность заряда ядра и генераторов на 60 секунд.",
@@ -743,7 +832,7 @@
             ua: {
                 energy: "Енергія Astra", ready: "Станція готова до роботи",
                 navCore: "Ядро", navWheel: "Колесо", navShop: "Модулі", navTop: "Топ", navBoost: "Бонуси",
-                boostActive: "Овердрайв Активний! Дохід х2", wheelTitle: "Квантовий Рулетер", spinBtn: "КРУТИТИ (50 ✦)",
+                boostActive: "Овердрайв Активний! Дохід х2", wheelTitle: "Квантовий Рулетер",
                 modulesTitle: "Автоматичні Модулі", m1: "Іонний Конденсатор", m2: "Орбітальний Збирач", m3: "Квантовий Реактор",
                 topTitle: "Топ Дослідників", boostTitle: "Прискорювачі Станції",
                 b1Title: "⚡ Овердрайв (х2 Енергія)", b1Desc: "Подвоює потужність заряду ядра і генераторів на 60 секунд.",
@@ -755,7 +844,7 @@
             en: {
                 energy: "Astra Energy", ready: "Station Operational",
                 navCore: "Core", navWheel: "Wheel", navShop: "Modules", navTop: "Top", navBoost: "Boosts",
-                boostActive: "Overdrive Active! Income x2", wheelTitle: "Quantum Spinner", spinBtn: "SPIN (50 ✦)",
+                boostActive: "Overdrive Active! Income x2", wheelTitle: "Quantum Spinner",
                 modulesTitle: "Automatic Modules", m1: "Ionic Capacitor", m2: "Orbital Harvester", m3: "Quantum Reactor",
                 topTitle: "Top Explorers", boostTitle: "Station Boosters",
                 b1Title: "⚡ Overdrive (x2 Energy)", b1Desc: "Doubles core charge and generator power for 60 seconds.",
@@ -776,7 +865,6 @@
             document.getElementById('navBoost').innerText = t.navBoost;
             document.getElementById('txtBoostActive').innerText = t.boostActive;
             document.getElementById('lblWheelTitle').innerText = t.wheelTitle;
-            document.getElementById('spinBtn').innerText = `${t.spinBtn.split(' ')[0]} (50 ✦)`;
             document.getElementById('lblModulesTitle').innerText = t.modulesTitle;
             document.getElementById('m1Title').innerText = t.m1;
             document.getElementById('m2Title').innerText = t.m2;
@@ -820,7 +908,7 @@
             document.getElementById('buyLaserBtn').innerText = `${laserCost} ✦`;
             document.getElementById('buyLaserBtn').disabled = state.balance < laserCost;
 
-            document.getElementById('spinBtn').disabled = state.balance < 50;
+            updateWheelButton();
 
             localStorage.setItem('ast_balance', state.balance);
             localStorage.setItem('ast_click_pwr', state.clickPower);
@@ -834,7 +922,6 @@
             updateLeaderboard();
         }
 
-        // ТЕМЫ И НАСТРОЙКИ
         function setTheme(thm) {
             state.theme = thm;
             document.body.className = '';
@@ -919,19 +1006,62 @@
             if (tab === 'wheel') drawWheel(currentWheelRotation);
         }
 
-        // КОЛЕСО ФОРТУНЫ С HD CANVAS
-        const wheelPrizes = [500, 50, 0, 200, 10, 20, 100, 5];
-        const wheelColors = ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92'];
+        // КЛИЕНТСКИЕ КОЛЕСА ФОРТУНЫ (3 РЕЖИМА)
+        const wheelConfigs = {
+            free: {
+                cost: 0,
+                isAd: true,
+                prizes: [300, 25, 0, 150, 10, 50, 100, 0],
+                colors: ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92']
+            },
+            medium: {
+                cost: 100,
+                isAd: false,
+                prizes: [1000, 50, 0, 300, 20, 150, 500, 0],
+                colors: ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92']
+            },
+            high: {
+                cost: 1000,
+                isAd: false,
+                prizes: [10000, 500, 0, 3000, 200, 1500, 5000, 0],
+                colors: ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92']
+            }
+        };
+
+        let currentWheelMode = 'medium';
         let isSpinning = false;
         let currentWheelRotation = 0;
+
+        function setWheelMode(mode) {
+            if (isSpinning) return;
+            currentWheelMode = mode;
+            document.getElementById('wBtnFree').classList.toggle('active', mode === 'free');
+            document.getElementById('wBtnMed').classList.toggle('active', mode === 'medium');
+            document.getElementById('wBtnHigh').classList.toggle('active', mode === 'high');
+
+            updateWheelButton();
+            drawWheel(currentWheelRotation);
+        }
+
+        function updateWheelButton() {
+            const btn = document.getElementById('spinBtn');
+            const cfg = wheelConfigs[currentWheelMode];
+            if (cfg.isAd) {
+                btn.innerText = "🎬 КРУТИТЬ (ЗА РЕКЛАМУ)";
+                btn.disabled = false;
+            } else {
+                btn.innerText = `КРУТИТЬ (${cfg.cost} ✦)`;
+                btn.disabled = state.balance < cfg.cost;
+            }
+        }
 
         function setupWheelCanvas() {
             const cvs = document.getElementById('wheelCanvas');
             const dpr = window.devicePixelRatio || 1;
-            cvs.width = 240 * dpr;
-            cvs.height = 240 * dpr;
-            cvs.style.width = '240px';
-            cvs.style.height = '240px';
+            cvs.width = 230 * dpr;
+            cvs.height = 230 * dpr;
+            cvs.style.width = '230px';
+            cvs.style.height = '230px';
             const ctx = cvs.getContext('2d');
             ctx.scale(dpr, dpr);
             return ctx;
@@ -939,17 +1069,18 @@
 
         function drawWheel(angle) {
             const ctx = setupWheelCanvas();
-            const numSegments = wheelPrizes.length;
+            const cfg = wheelConfigs[currentWheelMode];
+            const numSegments = cfg.prizes.length;
             const arc = (Math.PI * 2) / numSegments;
 
-            ctx.clearRect(0, 0, 240, 240);
+            ctx.clearRect(0, 0, 230, 230);
 
             for (let i = 0; i < numSegments; i++) {
                 let startArc = angle + i * arc;
                 ctx.beginPath();
-                ctx.fillStyle = wheelColors[i];
-                ctx.moveTo(120, 120);
-                ctx.arc(120, 120, 110, startArc, startArc + arc);
+                ctx.fillStyle = cfg.colors[i];
+                ctx.moveTo(115, 115);
+                ctx.arc(115, 115, 105, startArc, startArc + arc);
                 ctx.fill();
 
                 ctx.save();
@@ -958,14 +1089,14 @@
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 let textAngle = startArc + arc / 2;
-                ctx.translate(120 + Math.cos(textAngle) * 75, 120 + Math.sin(textAngle) * 75);
+                ctx.translate(115 + Math.cos(textAngle) * 70, 115 + Math.sin(textAngle) * 70);
                 ctx.rotate(textAngle + Math.PI / 2);
-                ctx.fillText(wheelPrizes[i] + "✦", 0, 0);
+                ctx.fillText(cfg.prizes[i] + "✦", 0, 0);
                 ctx.restore();
             }
 
             ctx.beginPath();
-            ctx.arc(120, 120, 22, 0, Math.PI * 2);
+            ctx.arc(115, 115, 20, 0, Math.PI * 2);
             ctx.fillStyle = "#06101e";
             ctx.fill();
             ctx.strokeStyle = "#00f2fe";
@@ -973,10 +1104,22 @@
             ctx.stroke();
         }
 
-        function spinWheel() {
-            if (isSpinning || state.balance < 50) return;
-            state.balance -= 50;
-            syncUI();
+        function spinWheel(triggeredByAd = false) {
+            const cfg = wheelConfigs[currentWheelMode];
+            if (isSpinning) return;
+
+            if (cfg.isAd && !triggeredByAd) {
+                watchAdReward('freeSpin');
+                return;
+            }
+
+            if (!cfg.isAd && state.balance < cfg.cost) return;
+
+            if (!cfg.isAd) {
+                state.balance -= cfg.cost;
+                syncUI();
+            }
+
             isSpinning = true;
 
             const duration = 4000;
@@ -1002,11 +1145,11 @@
                     
                     let normalizedAngle = (1.5 * Math.PI - currentWheelRotation) % (Math.PI * 2);
                     if (normalizedAngle < 0) normalizedAngle += Math.PI * 2;
-                    let segmentIndex = Math.floor(normalizedAngle / ((Math.PI * 2) / wheelPrizes.length)) % wheelPrizes.length;
+                    let segmentIndex = Math.floor(normalizedAngle / ((Math.PI * 2) / cfg.prizes.length)) % cfg.prizes.length;
                     
-                    let prize = wheelPrizes[segmentIndex];
+                    let prize = cfg.prizes[segmentIndex];
                     state.balance += prize;
-                    document.getElementById('statusMsg').innerText = `🎉 Выигрыш в колесе: +${prize} ✦!`;
+                    document.getElementById('statusMsg').innerText = prize > 0 ? `🎉 Выигрыш в колесе: +${prize} ✦!` : `🙁 В этот раз без выигрыша (0 ✦)`;
                     syncUI();
                 }
             }
@@ -1014,30 +1157,40 @@
             requestAnimationFrame(animate);
         }
 
-               // ЖИВОЙ ОБЩИЙ ТОП ЧЕРЕЗ GOOGLE ТАБЛИЦЫ
+        // ОБЩИЙ ТОП ЧЕРЕЗ GOOGLE ТАБЛИЦУ (С ДЕДУПЛИКАЦИЕЙ)
         async function updateLeaderboard() {
             const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.first_name : "Исследователь";
             const API_URL = "https://script.google.com/macros/s/AKfycbzfwQStGp4CJuRYJzdea-_ifqfZOLIo1NMKZpUo6WBiGm7tUjNax8rDN1z0r0_2ztKEaQ/exec";
 
-            let players = [];
+            let rawPlayers = [];
 
             try {
                 let response = await fetch(API_URL);
                 let data = await response.json();
-                players = data.players || [];
+                rawPlayers = data.players || [];
             } catch (e) {
-                players = [];
+                rawPlayers = [];
             }
 
-            // Ищем текущего игрока или добавляем
-            let meIndex = players.findIndex(p => p.name === userName);
-            if (meIndex !== -1) {
-                if (state.balance > players[meIndex].balance) {
-                    players[meIndex].balance = state.balance;
+            // ДЕДУПЛИКАЦИЯ ПО ИМЕНИ (убираем дублирование одной строки)
+            let playerMap = {};
+            rawPlayers.forEach(p => {
+                if (!p || !p.name) return;
+                let bal = Number(p.balance) || 0;
+                if (!playerMap[p.name] || bal > playerMap[p.name]) {
+                    playerMap[p.name] = bal;
                 }
-            } else {
-                players.push({ name: userName, balance: state.balance });
+            });
+
+            // Обновляем очки текущего игрока
+            if (!playerMap[userName] || state.balance > playerMap[userName]) {
+                playerMap[userName] = state.balance;
             }
+
+            let players = Object.keys(playerMap).map(n => ({
+                name: n,
+                balance: playerMap[n]
+            }));
 
             // Сортировка от богатых к новичкам
             players.sort((a, b) => b.balance - a.balance);
@@ -1080,18 +1233,42 @@
             });
         }
 
-
-        // ADSGRAM REWARDED
+        // ADSGRAM С БЛЮР-ОВЕРЛЕЕМ И 10-СЕКУНДНЫМ ТАЙМАУТОМ
         function watchAdReward(type) {
+            const overlay = document.getElementById('adLoadingOverlay');
+            const loaderText = document.getElementById('adLoaderText');
+            
+            loaderText.innerText = "Реклама загружается, пожалуйста, подождите...";
+            overlay.style.display = 'flex';
+
+            let adHandled = false;
+
+            // 10-секундный предохранитель
+            let timeoutId = setTimeout(() => {
+                if (!adHandled) {
+                    adHandled = true;
+                    overlay.style.display = 'none';
+                    document.getElementById('statusMsg').innerText = "⚠️ Реклама недоступна, попробуйте позже.";
+                }
+            }, 10000);
+
             if (!adController) {
-                document.getElementById('statusMsg').innerText = "⏳ Реклама загружается, пожалуйста, подождите...";
-                return;
+                try { if (window.Adsgram) adController = window.Adsgram.init({ blockId: "55380" }); } catch(e){}
+            }
+
+            if (!adController) {
+                return; // Таймаут сам сработает через 10 сек
             }
 
             localStorage.setItem('rq_ad_in_progress', 'true');
 
             adController.show().then((result) => {
+                if (adHandled) return;
+                adHandled = true;
+                clearTimeout(timeoutId);
+                overlay.style.display = 'none';
                 localStorage.removeItem('rq_ad_in_progress');
+
                 if (result.done) {
                     state.adsToday++;
                     state.adsTotal++;
@@ -1102,12 +1279,19 @@
                     } else if (type === 'grant') {
                         state.balance += 1000;
                         document.getElementById('statusMsg').innerText = "🎁 Получено +1,000 ✦! ✅";
+                    } else if (type === 'freeSpin') {
+                        document.getElementById('statusMsg').innerText = "🎰 Бесплатное вращение разблокировано! ✅";
+                        spinWheel(true);
                     }
                     syncUI();
                 }
             }).catch(() => {
+                if (adHandled) return;
+                adHandled = true;
+                clearTimeout(timeoutId);
+                overlay.style.display = 'none';
                 localStorage.removeItem('rq_ad_in_progress');
-                document.getElementById('statusMsg').innerText = "⚠️ Ролик не был досмотрен.";
+                document.getElementById('statusMsg').innerText = "⚠️ Реклама недоступна, попробуйте позже.";
             });
         }
 
