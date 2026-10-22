@@ -435,6 +435,11 @@
             text-align: center; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
         }
 
+        .ad-btn:disabled {
+            background: #101929; color: #3b4e6b; cursor: not-allowed;
+            box-shadow: none;
+        }
+
         .status-output {
             font-size: 11px; font-weight: 600; color: var(--text-sub);
             text-align: center; min-height: 16px;
@@ -671,13 +676,13 @@
                 <div class="ad-card">
                     <div class="ad-title" id="b1Title">⚡ Овердрайв (х2 Энергия)</div>
                     <div class="ad-desc" id="b1Desc">Удваивает мощность заряда ядра и генераторов на 60 секунд.</div>
-                    <button class="ad-btn" onclick="watchAdReward('boost')">Активировать x2</button>
+                    <button class="ad-btn" id="boostBtn1" onclick="watchAdReward('boost')">Активировать x2</button>
                 </div>
 
                 <div class="ad-card">
                     <div class="ad-title" id="b2Title">🎁 Квантовый Грант (+1,000 ✦)</div>
                     <div class="ad-desc" id="b2Desc">Мгновенное начисление +1,000 энергии Astra за просмотр ролика.</div>
-                    <button class="ad-btn" onclick="watchAdReward('grant')">Забрать +1,000 ✦</button>
+                    <button class="ad-btn" id="boostBtn2" onclick="watchAdReward('grant')">Забрать +1,000 ✦</button>
                 </div>
             </div>
         </div>
@@ -807,6 +812,13 @@
             lang: localStorage.getItem('ast_lang') || 'ru'
         };
 
+        // ТАЙМЕРЫ КУЛДАУНА РЕКЛАМЫ (в секундах)
+        let cooldowns = {
+            freeSpin: parseInt(localStorage.getItem('cd_freeSpin')) || 0,
+            boost: parseInt(localStorage.getItem('cd_boost')) || 0,
+            grant: parseInt(localStorage.getItem('cd_grant')) || 0
+        };
+
         if (state.lastDay !== new Date().toDateString()) {
             state.adsToday = 0;
             state.lastDay = new Date().toDateString();
@@ -908,6 +920,7 @@
             document.getElementById('buyLaserBtn').disabled = state.balance < laserCost;
 
             updateWheelButton();
+            updateBoostButtonsText();
 
             localStorage.setItem('ast_balance', state.balance);
             localStorage.setItem('ast_click_pwr', state.clickPower);
@@ -1046,8 +1059,13 @@
             const btn = document.getElementById('spinBtn');
             const cfg = wheelConfigs[currentWheelMode];
             if (cfg.isAd) {
-                btn.innerText = "🎬 КРУТИТЬ (ЗА РЕКЛАМУ)";
-                btn.disabled = false;
+                if (cooldowns.freeSpin > 0) {
+                    btn.innerText = `Доступно через: ${cooldowns.freeSpin} с`;
+                    btn.disabled = true;
+                } else {
+                    btn.innerText = "🎬 КРУТИТЬ (ЗА РЕКЛАМУ)";
+                    btn.disabled = false;
+                }
             } else {
                 btn.innerText = `КРУТИТЬ (${cfg.cost} ✦)`;
                 btn.disabled = state.balance < cfg.cost;
@@ -1108,6 +1126,7 @@
             if (isSpinning) return;
 
             if (cfg.isAd && !triggeredByAd) {
+                if (cooldowns.freeSpin > 0) return;
                 watchAdReward('freeSpin');
                 return;
             }
@@ -1156,7 +1175,54 @@
             requestAnimationFrame(animate);
         }
 
-        // ОБЩИЙ ТОП ЧЕРЕЗ GOOGLE ТАБЛИЦУ (С ДЕДУПЛИКАЦИЕЙ)
+        // ОБНОВЛЕНИЕ ТЕКСТА КНОПОК БОНУСОВ С УЧЕТОМ КУЛДАУНА
+        function updateBoostButtonsText() {
+            const btn1 = document.getElementById('boostBtn1');
+            const btn2 = document.getElementById('boostBtn2');
+
+            if (cooldowns.boost > 0) {
+                btn1.innerText = `Доступно через: ${cooldowns.boost} с`;
+                btn1.disabled = true;
+            } else {
+                btn1.innerText = "Активировать x2";
+                btn1.disabled = false;
+            }
+
+            if (cooldowns.grant > 0) {
+                btn2.innerText = `Доступно через: ${cooldowns.grant} с`;
+                btn2.disabled = true;
+            } else {
+                btn2.innerText = "Забрать +1,000 ✦";
+                btn2.disabled = false;
+            }
+        }
+
+        // ОБЩИЙ ТАЙМЕР КУЛДАУНОВ (ТИКАЕТ КАЖДУЮ СЕКУНДУ)
+        setInterval(() => {
+            let changed = false;
+            if (cooldowns.freeSpin > 0) {
+                cooldowns.freeSpin--;
+                localStorage.setItem('cd_freeSpin', cooldowns.freeSpin);
+                changed = true;
+            }
+            if (cooldowns.boost > 0) {
+                cooldowns.boost--;
+                localStorage.setItem('cd_boost', cooldowns.boost);
+                changed = true;
+            }
+            if (cooldowns.grant > 0) {
+                cooldowns.grant--;
+                localStorage.setItem('cd_grant', cooldowns.grant);
+                changed = true;
+            }
+
+            if (changed) {
+                updateWheelButton();
+                updateBoostButtonsText();
+            }
+        }, 1000);
+
+        // ОБЩИЙ ТОП ЧЕРЕЗ GOOGLE ТАБЛИЦУ (С ДЕДУПЛИКАЦИЕЙ)[span_0](start_span)[span_0](end_span)
         async function updateLeaderboard() {
             const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.first_name : "Исследователь";
             const API_URL = "https://script.google.com/macros/s/AKfycbzfwQStGp4CJuRYJzdea-_ifqfZOLIo1NMKZpUo6WBiGm7tUjNax8rDN1z0r0_2ztKEaQ/exec";
@@ -1171,7 +1237,7 @@
                 rawPlayers = [];
             }
 
-            // ДЕДУПЛИКАЦИЯ ПО ИМЕНИ (убираем повторы одной строки)
+            // ДЕДУПЛИКАЦИЯ ПО ИМЕНИ
             let playerMap = {};
             rawPlayers.forEach(p => {
                 if (!p || !p.name) return;
@@ -1181,7 +1247,6 @@
                 }
             });
 
-            // Обновляем очки текущего игрока
             if (!playerMap[userName] || state.balance > playerMap[userName]) {
                 playerMap[userName] = state.balance;
             }
@@ -1191,11 +1256,9 @@
                 balance: playerMap[n]
             }));
 
-            // Сортировка по убыванию
             players.sort((a, b) => b.balance - a.balance);
             let top5 = players.slice(0, 5);
 
-            // Отправляем актуальный баланс в Google Таблицу (POST)
             try {
                 fetch(API_URL, {
                     method: 'POST',
@@ -1232,8 +1295,13 @@
             });
         }
 
-        // ADSGRAM REWARDED (ИСПРАВЛЕННАЯ ЛОГИКА БЕЗ СРЫВА НАГРАДЫ)
+        // ADSGRAM REWARDED С АКТИВАЦИЕЙ КУЛДАУНА НА 30 СЕКУНД
         function watchAdReward(type) {
+            // Проверка кулдауна перед запуском
+            if (type === 'freeSpin' && cooldowns.freeSpin > 0) return;
+            if (type === 'boost' && cooldowns.boost > 0) return;
+            if (type === 'grant' && cooldowns.grant > 0) return;
+
             const overlay = document.getElementById('adLoadingOverlay');
             const loaderText = document.getElementById('adLoaderText');
             
@@ -1262,15 +1330,22 @@
                     state.adsToday++;
                     state.adsTotal++;
 
-                    if (type === 'boost') {
+                    // Включаем кулдаун на 30 секунд для конкретного типа рекламы
+                    if (type === 'freeSpin') {
+                        cooldowns.freeSpin = 30;
+                        localStorage.setItem('cd_freeSpin', 30);
+                        document.getElementById('statusMsg').innerText = "🎰 Бесплатное вращение разблокировано! ✅";
+                        spinWheel(true);
+                    } else if (type === 'boost') {
+                        cooldowns.boost = 30;
+                        localStorage.setItem('cd_boost', 30);
                         activateOverdrive();
                         document.getElementById('statusMsg').innerText = "🚀 Буст x2 активирован на 60 сек! ✅";
                     } else if (type === 'grant') {
+                        cooldowns.grant = 30;
+                        localStorage.setItem('cd_grant', 30);
                         state.balance += 1000;
                         document.getElementById('statusMsg').innerText = "🎁 Получено +1,000 ✦! ✅";
-                    } else if (type === 'freeSpin') {
-                        document.getElementById('statusMsg').innerText = "🎰 Бесплатное вращение разблокировано! ✅";
-                        spinWheel(true);
                     }
                     syncUI();
                 } else {
