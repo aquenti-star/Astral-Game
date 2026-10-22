@@ -1014,10 +1014,10 @@
             requestAnimationFrame(animate);
         }
 
-        // РЕАЛЬНЫЙ ОБЛАЧНЫЙ ТОП ЧЕРЕЗ NPOINT.IO
+               // ЖИВОЙ ОБЩИЙ ТОП ЧЕРЕЗ GOOGLE ТАБЛИЦЫ
         async function updateLeaderboard() {
             const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.first_name : "Исследователь";
-            const API_URL = "https://api.npoint.io/20d5a95c60228eee2787";
+            const API_URL = "https://script.google.com/macros/s/AKfycbzfwQStGp4CJuRYJzdea-_ifqfZOLIo1NMKZpUo6WBiGm7tUjNax8rDN1z0r0_2ztKEaQ/exec";
 
             let players = [];
 
@@ -1032,7 +1032,9 @@
             // Ищем текущего игрока или добавляем
             let meIndex = players.findIndex(p => p.name === userName);
             if (meIndex !== -1) {
-                players[meIndex].balance = state.balance;
+                if (state.balance > players[meIndex].balance) {
+                    players[meIndex].balance = state.balance;
+                }
             } else {
                 players.push({ name: userName, balance: state.balance });
             }
@@ -1041,12 +1043,12 @@
             players.sort((a, b) => b.balance - a.balance);
             let top5 = players.slice(0, 5);
 
-            // Отправляем обновленный топ обратно на сервер фоном
+            // Отправляем актуальный баланс в Google Таблицу (POST)
             try {
                 fetch(API_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ players: top5 })
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ name: userName, balance: state.balance })
                 }).catch(() => {});
             } catch (e) {}
 
@@ -1072,11 +1074,12 @@
                         <div class="avatar-badge">${p.name.charAt(0).toUpperCase()}</div>
                         <div class="leader-name">${p.name} ${isMe ? '👤' : ''}</div>
                     </div>
-                    <div class="leader-val">${p.balance.toLocaleString()} ✦</div>
+                    <div class="leader-val">${Number(p.balance).toLocaleString()} ✦</div>
                 `;
                 container.appendChild(row);
             });
         }
+
 
         // ADSGRAM REWARDED
         function watchAdReward(type) {
