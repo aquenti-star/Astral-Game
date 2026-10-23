@@ -774,9 +774,16 @@
             draw();
         })();
 
-        // ADSGRAM
+        // ADSGRAM & TELEGRAM USER ID ПРЕФИКСЫ ДЛЯ РАЗНЫХ АККАУНТОВ
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) tg.expand();
+
+        let userId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) ? tg.initDataUnsafe.user.id : "local_user";
+        
+        // Функция для получения ключей localStorage с учетом ID аккаунта Telegram
+        function getStorageKey(key) {
+            return `ast_${userId}_${key}`;
+        }
 
         let adController = null;
 
@@ -788,43 +795,50 @@
             } catch (e) {}
         }
 
-        if (localStorage.getItem('rq_ad_in_progress') === 'true') {
-            localStorage.removeItem('rq_ad_in_progress');
+        if (localStorage.getItem(getStorageKey('rq_ad_in_progress')) === 'true') {
+            localStorage.removeItem(getStorageKey('rq_ad_in_progress'));
             setTimeout(() => {
                 document.getElementById('statusMsg').innerText = "⚠️ Просмотр прерван при перезагрузке!";
             }, 400);
         }
 
-        // СОСТОЯНИЕ ИГРЫ
+        // ПОЛУЧЕНИЕ ТЕКУЩЕЙ ДАТЫ ПО МОСКВЕ (МСК) ДЛЯ СБРОСА В 00:00
+        function getMoscowDateString() {
+            return new Date().toLocaleDateString('ru-RU', { timeZone: 'Europe/Moscow' });
+        }
+
+        // СОСТОЯНИЕ ИГРЫ (УНИКАЛЬНОЕ ДЛЯ КАЖДОГО АККАУНТА TELEGRAM)
         let state = {
-            balance: parseInt(localStorage.getItem('ast_balance')) || 0,
-            clickPower: parseInt(localStorage.getItem('ast_click_pwr')) || 1,
-            autoIncome: parseInt(localStorage.getItem('ast_auto_pwr')) || 0,
-            clickLvl: parseInt(localStorage.getItem('ast_click_lvl')) || 1,
-            autoLvl: parseInt(localStorage.getItem('ast_auto_lvl')) || 0,
-            laserLvl: parseInt(localStorage.getItem('ast_laser_lvl')) || 0,
-            adsToday: parseInt(localStorage.getItem('ast_ads_today')) || 0,
-            adsTotal: parseInt(localStorage.getItem('ast_ads_total')) || 0,
-            lastDay: localStorage.getItem('ast_last_day') || new Date().toDateString(),
+            balance: parseInt(localStorage.getItem(getStorageKey('balance'))) || 0,
+            clickPower: parseInt(localStorage.getItem(getStorageKey('click_pwr'))) || 1,
+            autoIncome: parseInt(localStorage.getItem(getStorageKey('auto_pwr'))) || 0,
+            clickLvl: parseInt(localStorage.getItem(getStorageKey('click_lvl'))) || 1,
+            autoLvl: parseInt(localStorage.getItem(getStorageKey('auto_lvl'))) || 0,
+            laserLvl: parseInt(localStorage.getItem(getStorageKey('laser_lvl'))) || 0,
+            adsToday: parseInt(localStorage.getItem(getStorageKey('ads_today'))) || 0,
+            adsTotal: parseInt(localStorage.getItem(getStorageKey('ads_total'))) || 0,
+            lastDay: localStorage.getItem(getStorageKey('last_day')) || getMoscowDateString(),
             boostActive: false,
             boostTimeLeft: 0,
-            theme: localStorage.getItem('ast_theme') || 'standard',
-            lang: localStorage.getItem('ast_lang') || 'ru'
+            theme: localStorage.getItem(getStorageKey('theme')) || 'standard',
+            lang: localStorage.getItem(getStorageKey('lang')) || 'ru'
         };
 
-        // ТАЙМЕРЫ КУЛДАУНА РЕКЛАМЫ (в секундах)
-        let cooldowns = {
-            freeSpin: parseInt(localStorage.getItem('cd_freeSpin')) || 0,
-            boost: parseInt(localStorage.getItem('cd_boost')) || 0,
-            grant: parseInt(localStorage.getItem('cd_grant')) || 0
-        };
-
-        if (state.lastDay !== new Date().toDateString()) {
+        // ПРОВЕРКА СБРОСА «СЕГОДНЯ» ПО МСК
+        let currentMoscowDate = getMoscowDateString();
+        if (state.lastDay !== currentMoscowDate) {
             state.adsToday = 0;
-            state.lastDay = new Date().toDateString();
-            localStorage.setItem('ast_last_day', state.lastDay);
-            localStorage.setItem('ast_ads_today', 0);
+            state.lastDay = currentMoscowDate;
+            localStorage.setItem(getStorageKey('last_day'), state.lastDay);
+            localStorage.setItem(getStorageKey('ads_today'), 0);
         }
+
+        // ТАЙМЕРЫ КУЛДАУНА РЕКЛАМЫ
+        let cooldowns = {
+            freeSpin: parseInt(localStorage.getItem(getStorageKey('cd_freeSpin'))) || 0,
+            boost: parseInt(localStorage.getItem(getStorageKey('cd_boost'))) || 0,
+            grant: parseInt(localStorage.getItem(getStorageKey('cd_grant'))) || 0
+        };
 
         // ЯЗЫКОВОЙ СЛОВАРЬ (i18n)
         const i18n = {
@@ -901,6 +915,15 @@
         }
 
         function syncUI() {
+            // Проверка смены суток по МСК при каждом открытии/действии
+            let nowMoscow = getMoscowDateString();
+            if (state.lastDay !== nowMoscow) {
+                state.adsToday = 0;
+                state.lastDay = nowMoscow;
+                localStorage.setItem(getStorageKey('last_day'), state.lastDay);
+                localStorage.setItem(getStorageKey('ads_today'), 0);
+            }
+
             document.getElementById('balanceVal').innerText = state.balance.toLocaleString();
             const t = i18n[state.lang] || i18n.ru;
             document.getElementById('passiveVal').innerText = `+${state.autoIncome * (state.boostActive ? 2 : 1)} ✦${t.sec}`;
@@ -922,14 +945,14 @@
             updateWheelButton();
             updateBoostButtonsText();
 
-            localStorage.setItem('ast_balance', state.balance);
-            localStorage.setItem('ast_click_pwr', state.clickPower);
-            localStorage.setItem('ast_auto_pwr', state.autoIncome);
-            localStorage.setItem('ast_click_lvl', state.clickLvl);
-            localStorage.setItem('ast_auto_lvl', state.autoLvl);
-            localStorage.setItem('ast_laser_lvl', state.laserLvl);
-            localStorage.setItem('ast_ads_today', state.adsToday);
-            localStorage.setItem('ast_ads_total', state.adsTotal);
+            localStorage.setItem(getStorageKey('balance'), state.balance);
+            localStorage.setItem(getStorageKey('click_pwr'), state.clickPower);
+            localStorage.setItem(getStorageKey('auto_pwr'), state.autoIncome);
+            localStorage.setItem(getStorageKey('click_lvl'), state.clickLvl);
+            localStorage.setItem(getStorageKey('auto_lvl'), state.autoLvl);
+            localStorage.setItem(getStorageKey('laser_lvl'), state.laserLvl);
+            localStorage.setItem(getStorageKey('ads_today'), state.adsToday);
+            localStorage.setItem(getStorageKey('ads_total'), state.adsTotal);
 
             updateLeaderboard();
         }
@@ -943,7 +966,7 @@
             document.getElementById('thmDark').classList.toggle('selected', thm === 'dark');
             document.getElementById('thmLight').classList.toggle('selected', thm === 'light');
 
-            localStorage.setItem('ast_theme', thm);
+            localStorage.setItem(getStorageKey('theme'), thm);
         }
 
         function setLang(lng) {
@@ -952,7 +975,7 @@
             document.getElementById('langUa').classList.toggle('selected', lng === 'ua');
             document.getElementById('langEn').classList.toggle('selected', lng === 'en');
 
-            localStorage.setItem('ast_lang', lng);
+            localStorage.setItem(getStorageKey('lang'), lng);
             applyI18n();
             syncUI();
         }
@@ -1197,22 +1220,22 @@
             }
         }
 
-        // ОБЩИЙ ТАЙМЕР КУЛДАУНОВ (ТИКАЕТ КАЖДУЮ СЕКУНДУ)
+        // ТАЙМЕРЫ КУЛДАУНОВ
         setInterval(() => {
             let changed = false;
             if (cooldowns.freeSpin > 0) {
                 cooldowns.freeSpin--;
-                localStorage.setItem('cd_freeSpin', cooldowns.freeSpin);
+                localStorage.setItem(getStorageKey('cd_freeSpin'), cooldowns.freeSpin);
                 changed = true;
             }
             if (cooldowns.boost > 0) {
                 cooldowns.boost--;
-                localStorage.setItem('cd_boost', cooldowns.boost);
+                localStorage.setItem(getStorageKey('cd_boost'), cooldowns.boost);
                 changed = true;
             }
             if (cooldowns.grant > 0) {
                 cooldowns.grant--;
-                localStorage.setItem('cd_grant', cooldowns.grant);
+                localStorage.setItem(getStorageKey('cd_grant'), cooldowns.grant);
                 changed = true;
             }
 
@@ -1222,7 +1245,7 @@
             }
         }, 1000);
 
-        // ОБЩИЙ ТОП ЧЕРЕЗ GOOGLE ТАБЛИЦУ (С ДЕДУПЛИКАЦИЕЙ)[span_0](start_span)[span_0](end_span)
+        // ОБЩИЙ ТОП ЧЕРЕЗ GOOGLE ТАБЛИЦУ (С ДЕДУПЛИКАЦИЕЙ)
         async function updateLeaderboard() {
             const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.first_name : "Исследователь";
             const API_URL = "https://script.google.com/macros/s/AKfycbzfwQStGp4CJuRYJzdea-_ifqfZOLIo1NMKZpUo6WBiGm7tUjNax8rDN1z0r0_2ztKEaQ/exec";
@@ -1237,7 +1260,6 @@
                 rawPlayers = [];
             }
 
-            // ДЕДУПЛИКАЦИЯ ПО ИМЕНИ
             let playerMap = {};
             rawPlayers.forEach(p => {
                 if (!p || !p.name) return;
@@ -1295,9 +1317,8 @@
             });
         }
 
-        // ADSGRAM REWARDED С АКТИВАЦИЕЙ КУЛДАУНА НА 30 СЕКУНД
+        // ADSGRAM REWARDED
         function watchAdReward(type) {
-            // Проверка кулдауна перед запуском
             if (type === 'freeSpin' && cooldowns.freeSpin > 0) return;
             if (type === 'boost' && cooldowns.boost > 0) return;
             if (type === 'grant' && cooldowns.grant > 0) return;
@@ -1320,30 +1341,29 @@
                 return;
             }
 
-            localStorage.setItem('rq_ad_in_progress', 'true');
+            localStorage.setItem(getStorageKey('rq_ad_in_progress'), 'true');
 
             adController.show().then((result) => {
                 overlay.style.display = 'none';
-                localStorage.removeItem('rq_ad_in_progress');
+                localStorage.removeItem(getStorageKey('rq_ad_in_progress'));
 
                 if (result && result.done) {
                     state.adsToday++;
                     state.adsTotal++;
 
-                    // Включаем кулдаун на 30 секунд для конкретного типа рекламы
                     if (type === 'freeSpin') {
                         cooldowns.freeSpin = 30;
-                        localStorage.setItem('cd_freeSpin', 30);
+                        localStorage.setItem(getStorageKey('cd_freeSpin'), 30);
                         document.getElementById('statusMsg').innerText = "🎰 Бесплатное вращение разблокировано! ✅";
                         spinWheel(true);
                     } else if (type === 'boost') {
                         cooldowns.boost = 30;
-                        localStorage.setItem('cd_boost', 30);
+                        localStorage.setItem(getStorageKey('cd_boost'), 30);
                         activateOverdrive();
                         document.getElementById('statusMsg').innerText = "🚀 Буст x2 активирован на 60 сек! ✅";
                     } else if (type === 'grant') {
                         cooldowns.grant = 30;
-                        localStorage.setItem('cd_grant', 30);
+                        localStorage.setItem(getStorageKey('cd_grant'), 30);
                         state.balance += 1000;
                         document.getElementById('statusMsg').innerText = "🎁 Получено +1,000 ✦! ✅";
                     }
@@ -1353,7 +1373,7 @@
                 }
             }).catch(() => {
                 overlay.style.display = 'none';
-                localStorage.removeItem('rq_ad_in_progress');
+                localStorage.removeItem(getStorageKey('rq_ad_in_progress'));
                 document.getElementById('statusMsg').innerText = "⚠️ Реклама сейчас недоступна. Попробуйте позже.";
             });
         }
