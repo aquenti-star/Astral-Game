@@ -342,73 +342,7 @@
             box-shadow: none; cursor: not-allowed;
         }
 
-        /* Рейтинг Игроков (10 мест + скролл)[span_3](start_span)[span_3](end_span) */
-        .leaderboard-panel {
-            background: var(--panel-bg);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 20px;
-            padding: 16px;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-
-        .leaderboard-scroll {
-            max-height: 320px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding-right: 4px;
-        }
-
-        .leaderboard-scroll::-webkit-scrollbar {
-            width: 4px;
-        }
-        .leaderboard-scroll::-webkit-scrollbar-thumb {
-            background: var(--accent-cyan);
-            border-radius: 4px;
-        }
-
-        .leader-row {
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--tile-bg);
-            padding: 10px 12px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            flex-shrink: 0;
-        }
-
-        .leader-row.me {
-            border-color: var(--accent-cyan);
-            background: rgba(0, 242, 254, 0.08);
-        }
-
-        .leader-left { display: flex; align-items: center; gap: 10px; }
-
-        .rank-num {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 12px; font-weight: 800;
-            width: 22px; color: var(--text-sub);
-        }
-
-        .rank-1 { color: #ffd700; }
-        .rank-2 { color: #c0c0c0; }
-        .rank-3 { color: #cd7f32; }
-
-        .avatar-badge {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 800; color: #fff;
-        }
-
-        .leader-name { font-size: 12px; font-weight: 700; color: var(--text-main); }
-        .leader-val {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 11px; font-weight: 700; color: var(--accent-cyan);
-        }
-
-        /* Апгрейдер (Новая игра) */
+        /* Апгрейдер со стрелкой (синий неон) */
         .upgrader-panel {
             background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -422,19 +356,38 @@
 
         .upgrader-circle-wrap {
             position: relative;
-            width: 140px; height: 140px;
+            width: 180px; height: 180px;
             display: flex; align-items: center; justify-content: center;
-            background: radial-gradient(circle, rgba(0,242,254,0.1) 0%, transparent 70%);
+            margin: 10px 0;
+        }
+
+        #upgraderCanvas {
+            width: 180px; height: 180px;
             border-radius: 50%;
-            border: 2px dashed rgba(0,242,254,0.3);
+        }
+
+        .upgrader-center-info {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
         }
 
         .upgrader-chance {
             font-family: 'Unbounded', sans-serif;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
             color: var(--accent-cyan);
             text-shadow: 0 0 15px var(--accent-cyan);
+        }
+
+        .upgrader-chance-sub {
+            font-size: 9px;
+            color: var(--text-sub);
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         .upgrader-input-group {
@@ -557,7 +510,73 @@
             text-align: center; min-height: 16px;
         }
 
-        /* Оверлей Загрузки Рекламы c Блюром */
+        /* Рейтинг Игроков (10 мест + скролл)[span_2](start_span)[span_2](end_span) */
+        .leaderboard-panel {
+            background: var(--panel-bg);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        .leaderboard-scroll {
+            max-height: 320px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 4px;
+        }
+
+        .leaderboard-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .leaderboard-scroll::-webkit-scrollbar-thumb {
+            background: var(--accent-cyan);
+            border-radius: 4px;
+        }
+
+        .leader-row {
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--tile-bg);
+            padding: 10px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+        }
+
+        .leader-row.me {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.08);
+        }
+
+        .leader-left { display: flex; align-items: center; gap: 10px; }
+
+        .rank-num {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 12px; font-weight: 800;
+            width: 22px; color: var(--text-sub);
+        }
+
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+
+        .avatar-badge {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 800; color: #fff;
+        }
+
+        .leader-name { font-size: 12px; font-weight: 700; color: var(--text-main); }
+        .leader-val {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 11px; font-weight: 700; color: var(--accent-cyan);
+        }
+
+        /* Оверлей Загрузки Рекламы */
         .ad-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -742,13 +761,17 @@
             </div>
         </div>
 
-        <!-- 3. ИГРА «АПГРЕЙДЕР» (НОВАЯ) -->
+        <!-- 3. ИГРА «АПГРЕЙДЕР» СО СТРЕЛКОЙ -->
         <div id="viewUpgrade" class="view-layer">
             <div class="upgrader-panel">
                 <div class="card-label">Квантовый Апгрейдер Снаряжения</div>
                 
                 <div class="upgrader-circle-wrap">
-                    <div class="upgrader-chance" id="upgraderChanceText">50%</div>
+                    <canvas id="upgraderCanvas"></canvas>
+                    <div class="upgrader-center-info">
+                        <div class="upgrader-chance" id="upgraderChanceText">33%</div>
+                        <div class="upgrader-chance-sub" id="upgraderChanceSub">Шанс успеха</div>
+                    </div>
                 </div>
 
                 <div class="upgrader-input-group">
@@ -803,7 +826,7 @@
             </div>
         </div>
 
-        <!-- 5. РЕЙТИНГ ИГРОКОВ (10 МЕСТ С СКРОЛЛОМ)[span_4](start_span)[span_4](end_span) -->
+        <!-- 5. РЕЙТИНГ ИГРОКОВ (10 МЕСТ С СКРОЛЛОМ)[span_3](start_span)[span_3](end_span) -->
         <div id="viewTop" class="view-layer">
             <div class="leaderboard-panel">
                 <div class="card-label" id="lblTopTitle">Топ Исследователей (Топ 10)</div>
@@ -936,7 +959,7 @@
             return new Date().toLocaleDateString('ru-RU', { timeZone: 'Europe/Moscow' });
         }
 
-        // СОСТОЯНИЕ ИГРЫ (ОБЩИЕ КЛЮЧИ БЕЗ ПРИВЯЗКИ ID, ЧТОБЫ БАЛАНС НЕ СБРАСЫВАЛСЯ)
+        // СОСТОЯНИЕ ИГРЫ
         let state = {
             balance: parseInt(localStorage.getItem('ast_balance')) || 0,
             clickPower: parseInt(localStorage.getItem('ast_click_pwr')) || 1,
@@ -967,49 +990,6 @@
             boost: parseInt(localStorage.getItem('ast_cd_boost')) || 0,
             grant: parseInt(localStorage.getItem('ast_cd_grant')) || 0
         };
-
-        // ЯЗЫКОВОЙ СЛОВАРЬ (i18n)
-        const i18n = {
-            ru: {
-                energy: "Энергия Astra", ready: "Станция готова к работе",
-                navCore: "Ядро", navWheel: "Колесо", navUpgrade: "Апгрейд", navShop: "Модули", navTop: "Топ", navBoost: "Бонусы",
-                boostActive: "Овердрайв Активен! Доход х2", wheelTitle: "Квантовый Рулетёр",
-                modulesTitle: "Автоматические Модули", m1: "Ионный Конденсатор", m2: "Орбитальный Сборщик", m3: "Квантовый Реактор",
-                topTitle: "Топ Исследователей (Топ 10)", boostTitle: "Ускорители Станции",
-                b1Title: "⚡ Овердрайв (х2 Энергия)", b1Desc: "Удваивает мощность заряда ядра и генераторов на 60 секунд.",
-                b2Title: "🎁 Квантовый Грант (+1,000 ✦)", b2Desc: "Мгновенное начисление +1,000 энергии Astra за просмотр ролика.",
-                stgTitle: "⚙️ Настройки", stgTheme: "Тема оформления", stgLang: "Язык интерфейса", close: "Закрыть",
-                stdThm: "🌌 Стандартная", drkThm: "🌑 Тёмная", lgtThm: "☀️ Светлая",
-                sec: "/сек", lvl: "Ур.", charge: "к заряду"
-            }
-        };
-
-        function applyI18n() {
-            const t = i18n.ru;
-            document.getElementById('lblEnergy').innerText = t.energy;
-            document.getElementById('navCore').innerText = t.navCore;
-            document.getElementById('navWheel').innerText = t.navWheel;
-            document.getElementById('tabUpgrade').innerText = "📈 Апгрейд";
-            document.getElementById('navShop').innerText = t.navShop;
-            document.getElementById('navTop').innerText = t.navTop;
-            document.getElementById('navBoost').innerText = t.navBoost;
-            document.getElementById('txtBoostActive').innerText = t.boostActive;
-            document.getElementById('lblWheelTitle').innerText = t.wheelTitle;
-            document.getElementById('lblModulesTitle').innerText = t.modulesTitle;
-            document.getElementById('m1Title').innerText = t.m1;
-            document.getElementById('m2Title').innerText = t.m2;
-            document.getElementById('m3Title').innerText = t.m3;
-            document.getElementById('lblTopTitle').innerText = t.topTitle;
-            document.getElementById('lblBoostTitle').innerText = t.boostTitle;
-            document.getElementById('b1Title').innerText = t.b1Title;
-            document.getElementById('b1Desc').innerText = t.b1Desc;
-            document.getElementById('b2Title').innerText = t.b2Title;
-            document.getElementById('b2Desc').innerText = t.b2Desc;
-
-            document.getElementById('clickLvlText').innerText = `+1 к заряду (Ур. ${state.clickLvl})`;
-            document.getElementById('autoLvlText').innerText = `+1 ✦/сек (Ур. ${state.autoLvl})`;
-            document.getElementById('laserLvlText').innerText = `+5 к заряду (Ур. ${state.laserLvl})`;
-        }
 
         function syncUI() {
             let nowMoscow = getMoscowDateString();
@@ -1062,7 +1042,6 @@
         function setLang(lng) {
             state.lang = lng;
             localStorage.setItem('ast_lang', lng);
-            applyI18n();
             syncUI();
         }
 
@@ -1107,7 +1086,9 @@
                 let cost = Math.floor(250 * Math.pow(1.7, state.laserLvl));
                 if (state.balance >= cost) { state.balance -= cost; state.clickPower += 5; state.laserLvl++; }
             }
-            applyI18n();
+            document.getElementById('clickLvlText').innerText = `+1 к заряду (Ур. ${state.clickLvl})`;
+            document.getElementById('autoLvlText').innerText = `+1 ✦/сек (Ур. ${state.autoLvl})`;
+            document.getElementById('laserLvlText').innerText = `+5 к заряду (Ур. ${state.laserLvl})`;
             syncUI();
         }
 
@@ -1125,6 +1106,7 @@
             document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
             document.getElementById('view' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
             if (tab === 'wheel') drawWheel(currentWheelRotation);
+            if (tab === 'upgrade') drawUpgrader(0, 33);
         }
 
         // КОЛЕСО ФОРТУНЫ
@@ -1252,22 +1234,85 @@
             requestAnimationFrame(animate);
         }
 
-        // ИГРА «АПГРЕЙДЕР»
+        // ИГРА «АПГРЕЙДЕР» СО СТРЕЛКОЙ СИЕЩЕГО НЕОНА
         let currentUpgradeChance = 33;
         let currentUpgradeMultiplier = 3;
+        let isUpgrading = false;
 
         function setMultiplier(chance, mult) {
+            if (isUpgrading) return;
             currentUpgradeChance = chance;
             currentUpgradeMultiplier = mult;
             document.getElementById('upgraderChanceText').innerText = chance + "%";
             document.querySelectorAll('.mult-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
+            drawUpgrader(0, chance);
+        }
+
+        function setupUpgraderCanvas() {
+            const cvs = document.getElementById('upgraderCanvas');
+            const dpr = window.devicePixelRatio || 1;
+            cvs.width = 180 * dpr; cvs.height = 180 * dpr;
+            cvs.style.width = '180px'; cvs.style.height = '180px';
+            const ctx = cvs.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return ctx;
+        }
+
+        function drawUpgrader(pointerAngle, chance) {
+            const ctx = setupUpgraderCanvas();
+            ctx.clearRect(0, 0, 180, 180);
+
+            // Внешнее кольцо шкалы
+            ctx.beginPath();
+            ctx.arc(90, 90, 75, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+            ctx.lineWidth = 10;
+            ctx.stroke();
+
+            // Дуга шанса
+            let chanceAngle = (chance / 100) * (Math.PI * 2);
+            ctx.beginPath();
+            ctx.arc(90, 90, 75, -Math.PI / 2, -Math.PI / 2 + chanceAngle);
+            ctx.strokeStyle = "#00f2fe";
+            ctx.lineWidth = 10;
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = "#00f2fe";
+            ctx.stroke();
+            ctx.shadowBlur = 0; // сброс тени
+
+            // Внутреннее кольцо
+            ctx.beginPath();
+            ctx.arc(90, 90, 58, 0, Math.PI * 2);
+            ctx.fillStyle = "#06101e";
+            ctx.fill();
+
+            // Вращающаяся синяя стрелка со свечением (как на видео)
+            ctx.save();
+            ctx.translate(90, 90);
+            ctx.rotate(pointerAngle);
+
+            ctx.beginPath();
+            ctx.moveTo(0, -78);
+            ctx.lineTo(-6, -56);
+            ctx.lineTo(6, -56);
+            ctx.closePath();
+            
+            let arrowGrad = ctx.createLinearGradient(0, -78, 0, -56);
+            arrowGrad.addColorStop(0, '#00f2fe');
+            arrowGrad.addColorStop(1, '#0072ff');
+            ctx.fillStyle = arrowGrad;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#00f2fe';
+            ctx.fill();
+            ctx.restore();
         }
 
         function startUpgrade() {
             let betInput = document.getElementById('upgradeBetInput');
             let bet = parseInt(betInput.value) || 0;
 
+            if (isUpgrading) return;
             if (bet <= 0 || bet > state.balance) {
                 document.getElementById('statusMsg').innerText = "⚠️ Недостаточно средств для ставки!";
                 return;
@@ -1276,26 +1321,42 @@
             state.balance -= bet;
             syncUI();
 
+            isUpgrading = true;
             let btn = document.getElementById('startUpgradeBtn');
             btn.disabled = true;
             document.getElementById('statusMsg').innerText = "🔄 Квантовый апгрейд запущен...";
 
-            let chanceContainer = document.getElementById('upgraderChanceText');
             let startTime = Date.now();
-            let duration = 3000; // 3 секунды азартной прокрутки
+            let duration = 4000; // 4 секунды долгой азартной прокрутки
+            let startRotation = Math.random() * Math.PI * 2;
+            let extraSpins = Math.PI * 2 * (6 + Math.floor(Math.random() * 4));
+            let targetRotation = startRotation + extraSpins + (Math.random() * Math.PI * 2);
 
-            function rollAnimation() {
+            let chanceContainer = document.getElementById('upgraderChanceText');
+
+            function animateUpgrade() {
                 let elapsed = Date.now() - startTime;
-                if (elapsed < duration) {
-                    let randomNum = Math.floor(Math.random() * 100) + 1;
-                    chanceContainer.innerText = randomNum + "%";
-                    requestAnimationFrame(rollAnimation);
-                } else {
-                    // Финальный бросок
-                    let finalRoll = Math.floor(Math.random() * 100) + 1;
-                    chanceContainer.innerText = finalRoll + "%";
+                let progress = Math.min(1, elapsed / duration);
+                let ease = 1 - Math.pow(1 - progress, 5); // плавное замедление
 
+                let currentAngle = startRotation + (targetRotation - startRotation) * ease;
+                drawUpgrader(currentAngle, currentUpgradeChance);
+
+                // Имитация случайных цифр процента во время бешеного вращения
+                if (progress < 0.9) {
+                    chanceContainer.innerText = (Math.random() * 99 + 1).toFixed(1) + "%";
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateUpgrade);
+                } else {
+                    isUpgrading = false;
+                    chanceContainer.innerText = currentUpgradeChance + "%";
+
+                    // Розыгрыш
+                    let finalRoll = Math.floor(Math.random() * 100) + 1;
                     let isWin = finalRoll <= currentUpgradeChance;
+
                     if (isWin) {
                         let winAmount = Math.floor(bet * currentUpgradeMultiplier);
                         state.balance += winAmount;
@@ -1307,7 +1368,8 @@
                     syncUI();
                 }
             }
-            requestAnimationFrame(rollAnimation);
+
+            requestAnimationFrame(animateUpgrade);
         }
 
         // ОБНОВЛЕНИЕ ТЕКСТА КНОПОК БОНУСОВ
@@ -1339,24 +1401,17 @@
             if (changed) { updateWheelButton(); updateBoostButtonsText(); }
         }, 1000);
 
-        // ТОП 10 ИГРОКОВ (СИНХРОНИЗАЦИЯ С GOOGLE ТАБЛИЦЕЙ И ВИРТУАЛЬНЫМИ БОТАМИ)
-        // 💡 КАК ДОБАВИТЬ ВИРТУАЛЬНЫХ ИГРОКОВ:
-        // Ты можешь прямо в массив `defaultFakePlayers` ниже вписать сколько угодно ботов с любыми никами и балансами!
-        // Также эти данные автоматически подтягиваются из твоей Google Таблицы (первые 10 строк).
+        // ТОП 10 ИГРОКОВ (СИНХРОНИЗАЦИЯ С ТВОИМИ ИГРОКАМИ И GOOGLE ТАБЛИЦЕЙ)[span_4](start_span)[span_4](end_span)[span_5](start_span)[span_5](end_span)
         const defaultFakePlayers = [
-            { name: "Alex_Astra", balance: 245000 },
-            { name: "CyberKing", balance: 189000 },
-            { name: "Durov_Fan", balance: 154000 },
-            { name: "CryptoMoon", balance: 112000 },
-            { name: "StarMiner", balance: 95000 },
-            { name: "Satoshi", balance: 78000 },
-            { name: "NeonGhost", balance: 64000 },
-            { name: "AstraPilot", balance: 42000 },
-            { name: "SolanaBoy", balance: 29000 }
+            { name: "КОЛЛЕКТОР 🇹🇷", balance: 94025 },
+            { name: "Данил", balance: 60390 },
+            { name: "шура", balance: 41297 },
+            { name: "Jeep Си", balance: 29402 },
+            { name: "Sega", balance: 21858 },
+            { name: "рейт #флекс", balance: 9192 }
         ];
 
         async function updateLeaderboard() {
-            // Единый ник по имени профиля Telegram, чтобы аккаунты с форков не раздваивались
             const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) ? tg.initDataUnsafe.user.first_name : "Исследователь";
             const API_URL = "https://script.google.com/macros/s/AKfycbzfwQStGp4CJuRYJzdea-_ifqfZOLIo1NMKZpUo6WBiGm7tUjNax8rDN1z0r0_2ztKEaQ/exec";
 
@@ -1370,7 +1425,6 @@
                 }
             } catch (e) {}
 
-            // Дедупликация по имени
             let playerMap = {};
             rawPlayers.forEach(p => {
                 if (!p || !p.name) return;
@@ -1380,7 +1434,6 @@
                 }
             });
 
-            // Обновляем очки реального игрока
             if (!playerMap[userName] || state.balance > playerMap[userName]) {
                 playerMap[userName] = state.balance;
             }
@@ -1390,11 +1443,9 @@
                 balance: playerMap[n]
             }));
 
-            // Сортировка и срез ТОП 10[span_5](start_span)[span_5](end_span)
             players.sort((a, b) => b.balance - a.balance);
             let top10 = players.slice(0, 10);
 
-            // Отправка баланса в таблицу
             try {
                 fetch(API_URL, {
                     method: 'POST',
@@ -1504,6 +1555,7 @@
         initAdsgram();
         syncUI();
         drawWheel(0);
+        drawUpgrader(0, 33);
     </script>
 </body>
 </html>
