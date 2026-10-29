@@ -342,7 +342,7 @@
             box-shadow: none; cursor: not-allowed;
         }
 
-        /* Апгрейдер (12 секунд азартной прокрутки) */
+        /* Апгрейдер со стрелкой (чистые % без иксов) */
         .upgrader-panel {
             background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -421,7 +421,7 @@
             background: var(--tile-bg);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text-sub);
-            padding: 8px 2px;
+            padding: 9px 2px;
             border-radius: 8px;
             font-size: 11px;
             font-weight: 700;
@@ -510,7 +510,7 @@
             text-align: center; min-height: 16px;
         }
 
-        /* Рейтинг Игроков (10 мест + скролл)[span_0](start_span)[span_0](end_span) */
+        /* Рейтинг Игроков */
         .leaderboard-panel {
             background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -528,13 +528,8 @@
             padding-right: 4px;
         }
 
-        .leaderboard-scroll::-webkit-scrollbar {
-            width: 4px;
-        }
-        .leaderboard-scroll::-webkit-scrollbar-thumb {
-            background: var(--accent-cyan);
-            border-radius: 4px;
-        }
+        .leaderboard-scroll::-webkit-scrollbar { width: 4px; }
+        .leaderboard-scroll::-webkit-scrollbar-thumb { background: var(--accent-cyan); border-radius: 4px; }
 
         .leader-row {
             display: flex; align-items: center; justify-content: space-between;
@@ -576,7 +571,7 @@
             font-size: 11px; font-weight: 700; color: var(--accent-cyan);
         }
 
-        /* Оверлей Загрузки Рекламы */
+        /* Полноэкранный оверлей загрузки рекламы с блюром */
         .ad-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -761,7 +756,7 @@
             </div>
         </div>
 
-        <!-- 3. ИГРА «АПГРЕЙДЕР» СО СТРЕЛКОЙ И 12-СЕКУНДНЫМ КРУЧЕНИЕМ -->
+        <!-- 3. ИГРА «АПГРЕЙДЕР» (ТОЛЬКО ЧИСТЫЕ % БЕЗ ИКСОВ И ЛОГИЧНЫЕ МНОЖИТЕЛИ) -->
         <div id="viewUpgrade" class="view-layer">
             <div class="upgrader-panel">
                 <div class="card-label">Квантовый Апгрейдер Снаряжения</div>
@@ -769,7 +764,7 @@
                 <div class="upgrader-circle-wrap">
                     <canvas id="upgraderCanvas"></canvas>
                     <div class="upgrader-center-info">
-                        <div class="upgrader-chance" id="upgraderChanceText">33%</div>
+                        <div class="upgrader-chance" id="upgraderChanceText">50%</div>
                         <div class="upgrader-chance-sub" id="upgraderChanceSub">Шанс успеха</div>
                     </div>
                 </div>
@@ -779,16 +774,16 @@
                     <input type="number" id="upgradeBetInput" class="upgrader-input" value="100" min="1">
                 </div>
 
-                <div style="font-size: 10px; color: var(--text-sub); font-weight: 700; width: 100%; text-align: left;">Выберите шанс / множитель:</div>
+                <div style="font-size: 10px; color: var(--text-sub); font-weight: 700; width: 100%; text-align: left;">Выберите шанс успеха:</div>
                 <div class="multiplier-grid">
-                    <button class="mult-btn" onclick="setMultiplier(25, 2)">x2 (25%)</button>
-                    <button class="mult-btn" onclick="setMultiplier(50, 4)">x4 (50%)</button>
-                    <button class="mult-btn" onclick="setMultiplier(75, 8)">x8 (75%)</button>
-                    <button class="mult-btn active" onclick="setMultiplier(33, 3)">x3 (33%)</button>
-                    <button class="mult-btn" onclick="setMultiplier(10, 10)">x10 (10%)</button>
-                    <button class="mult-btn" onclick="setMultiplier(40, 2.5)">x2.5 (40%)</button>
-                    <button class="mult-btn" onclick="setMultiplier(60, 1.5)">x1.5 (60%)</button>
-                    <button class="mult-btn" onclick="setMultiplier(90, 1.1)">x1.1 (90%)</button>
+                    <button class="mult-btn" onclick="setMultiplier(10, 10)">10%</button>
+                    <button class="mult-btn" onclick="setMultiplier(25, 4)">25%</button>
+                    <button class="mult-btn" onclick="setMultiplier(33, 3)">33%</button>
+                    <button class="mult-btn active" onclick="setMultiplier(50, 2)">50%</button>
+                    <button class="mult-btn" onclick="setMultiplier(60, 1.66)">60%</button>
+                    <button class="mult-btn" onclick="setMultiplier(75, 1.33)">75%</button>
+                    <button class="mult-btn" onclick="setMultiplier(80, 1.25)">80%</button>
+                    <button class="mult-btn" onclick="setMultiplier(90, 1.11)">90%</button>
                 </div>
 
                 <button class="upgrade-action-btn" id="startUpgradeBtn" onclick="startUpgrade()">ЗАПУСТИТЬ АПГРЕЙД</button>
@@ -826,7 +821,7 @@
             </div>
         </div>
 
-        <!-- 5. РЕЙТИНГ ИГРОКОВ (10 МЕСТ С СКРОЛЛОМ)[span_1](start_span)[span_1](end_span) -->
+        <!-- 5. РЕЙТИНГ ИГРОКОВ (10 МЕСТ С СКРОЛЛОМ)[span_0](start_span)[span_0](end_span) -->
         <div id="viewTop" class="view-layer">
             <div class="leaderboard-panel">
                 <div class="card-label" id="lblTopTitle">Топ Исследователей (Топ 10)</div>
@@ -855,7 +850,7 @@
 
     </div>
 
-    <!-- Оверлей Загрузки Рекламы -->
+    <!-- ПОЛНОЭКРАННЫЙ ОВЕРЛЕЙ ЗАГРУЗКИ РЕКЛАМЫ С БЛЮРОМ -->
     <div class="ad-overlay" id="adLoadingOverlay">
         <div class="ad-loader-card">
             <div class="ad-spinner"></div>
@@ -1234,9 +1229,9 @@
             requestAnimationFrame(animate);
         }
 
-        // ИГРА «АПГРЕЙДЕР» СО СТРЕЛКОЙ И 12-СЕКУНДНЫМ КРУЧЕНИЕМ
-        let currentUpgradeChance = 33;
-        let currentUpgradeMultiplier = 3;
+        // АПГРЕЙДЕР С ТОЧНЫМИ И ЛОГИЧНЫМИ МНОЖИТЕЛЯМИ
+        let currentUpgradeChance = 50;
+        let currentUpgradeMultiplier = 2;
         let isUpgrading = false;
 
         function setMultiplier(chance, mult) {
@@ -1270,7 +1265,7 @@
             ctx.lineWidth = 10;
             ctx.stroke();
 
-            // Синяя дуга шанса (начинается с верха -Math.PI/2)
+            // Синяя дуга шанса
             let chanceAngle = (chance / 100) * (Math.PI * 2);
             ctx.beginPath();
             ctx.arc(90, 90, 75, -Math.PI / 2, -Math.PI / 2 + chanceAngle);
@@ -1326,20 +1321,15 @@
             btn.disabled = true;
             document.getElementById('statusMsg').innerText = "🔄 Квантовый апгрейд запущен...";
 
-            // РЕШАЕМ ЗАРАНЕЕ, ПОБЕДА ИЛИ ПРОИГРЫШ (строго по шансу)
             let isWin = (Math.random() * 100) < currentUpgradeChance;
 
-            // Вычисляем финальный угол стрелки в радианах
-            // Шансовая зона начинается с 0 (верх) и идет по часовой стрелке до (chance / 100) * 360 градусов
             let finalAngleTarget;
             if (isWin) {
-                // Случайный угол строго ВНУТРИ синей зоны (от 2% до (chance - 2)%, чтобы не падало на самый край)
                 let safeChanceMin = 2;
                 let safeChanceMax = Math.max(safeChanceMin, currentUpgradeChance - 2);
                 let randomWinPercent = safeChanceMin + Math.random() * (safeChanceMax - safeChanceMin);
                 finalAngleTarget = (randomWinPercent / 100) * (Math.PI * 2);
             } else {
-                // Случайный угол строго ВНЕ синей зоны (в оставшемся секторе)
                 let failPercentMin = currentUpgradeChance + 3;
                 let failPercentMax = 97;
                 let randomFailPercent = failPercentMin + Math.random() * (failPercentMax - failPercentMin);
@@ -1347,16 +1337,14 @@
             }
 
             let startTime = Date.now();
-            let duration = 12000; // Ровно 12 секунд азартной долгой прокрутки
-            let totalSpins = Math.PI * 2 * (10 + Math.floor(Math.random() * 5)); // 10-14 полных оборотов
+            let duration = 12000; // Ровно 12 секунд долгой азартной прокрутки
+            let totalSpins = Math.PI * 2 * (10 + Math.floor(Math.random() * 5));
             let startRotation = 0;
             let targetRotation = startRotation + totalSpins + finalAngleTarget;
 
             function animateUpgrade() {
                 let elapsed = Date.now() - startTime;
                 let progress = Math.min(1, elapsed / duration);
-                
-                // Сверхплавная функция замедления (cubic/quintic ease-out) для долгого затухания
                 let ease = 1 - Math.pow(1 - progress, 4);
 
                 let currentAngle = startRotation + (targetRotation - startRotation) * ease;
@@ -1411,7 +1399,7 @@
             if (changed) { updateWheelButton(); updateBoostButtonsText(); }
         }, 1000);
 
-        // ТОП 10 ИГРОКОВ (СИНХРОНИЗАЦИЯ С ТВОИМИ ИГРОКАМИ И GOOGLE ТАБЛИЦЕЙ)[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span)
+        // ТОП 10 ИГРОКОВ (СИНХРОНИЗАЦИЯ С ТВОИМИ ИГРОКАМИ И GOOGLE ТАБЛИЦЕЙ)[span_1](start_span)[span_1](end_span)[span_2](start_span)[span_2](end_span)
         const defaultFakePlayers = [
             { name: "КОЛЛЕКТОР 🇹🇷", balance: 94025 },
             { name: "Данил", balance: 60390 },
@@ -1487,7 +1475,7 @@
             });
         }
 
-        // ADSGRAM REWARDED
+        // ADSGRAM REWARDED (С ПОЛНОЭКРАННЫМ БЛЮРОВАННЫМ ОВЕРЛЕЕМ ЗАГРУЗКИ)
         function watchAdReward(type) {
             if (type === 'freeSpin' && cooldowns.freeSpin > 0) return;
             if (type === 'boost' && cooldowns.boost > 0) return;
