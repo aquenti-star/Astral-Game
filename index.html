@@ -84,7 +84,6 @@
             gap: 14px;
             position: relative;
             z-index: 1;
-            padding-bottom: 30px;
         }
 
         /* Главная карточка энергии */
@@ -159,11 +158,11 @@
             margin-top: 4px;
         }
 
-        /* Навигация вкладок (6 штук) */
+        /* Навигация вкладок */
         .nav-tabs {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 4px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
             width: 100%;
         }
 
@@ -171,9 +170,9 @@
             background: var(--btn-bg);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text-sub);
-            padding: 8px 1px;
-            border-radius: 10px;
-            font-size: 9px;
+            padding: 10px 2px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
@@ -342,116 +341,52 @@
             box-shadow: none; cursor: not-allowed;
         }
 
-        /* Апгрейдер со стрелкой (чистые % без иксов) */
-        .upgrader-panel {
+        /* Рейтинг Игроков */
+        .leaderboard-panel {
             background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 20px;
             padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: center;
+            display: flex; flex-direction: column; gap: 10px;
         }
 
-        .upgrader-circle-wrap {
-            position: relative;
-            width: 180px; height: 180px;
-            display: flex; align-items: center; justify-content: center;
-            margin: 10px 0;
-        }
-
-        #upgraderCanvas {
-            width: 180px; height: 180px;
-            border-radius: 50%;
-        }
-
-        .upgrader-center-info {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-        }
-
-        .upgrader-chance {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--accent-cyan);
-            text-shadow: 0 0 15px var(--accent-cyan);
-        }
-
-        .upgrader-chance-sub {
-            font-size: 9px;
-            color: var(--text-sub);
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .upgrader-input-group {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .upgrader-input {
-            width: 100%;
+        .leader-row {
+            display: flex; align-items: center; justify-content: space-between;
             background: var(--tile-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 14px;
-            border-radius: 12px;
-            color: #fff;
-            font-family: 'Unbounded', sans-serif;
-            font-size: 14px;
-            outline: none;
-            text-align: center;
+            padding: 10px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .multiplier-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
-            width: 100%;
-        }
-
-        .mult-btn {
-            background: var(--tile-bg);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--text-sub);
-            padding: 9px 2px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.2s;
-        }
-
-        .mult-btn.active {
+        .leader-row.me {
             border-color: var(--accent-cyan);
-            background: rgba(0, 242, 254, 0.15);
-            color: var(--text-main);
+            background: rgba(0, 242, 254, 0.08);
         }
 
-        .upgrade-action-btn {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            border: none; color: #ffffff;
-            padding: 12px;
-            border-radius: 12px;
+        .leader-left { display: flex; align-items: center; gap: 10px; }
+
+        .rank-num {
             font-family: 'Unbounded', sans-serif;
-            font-size: 12px; font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 198, 255, 0.4);
-            width: 100%;
-            text-align: center;
+            font-size: 12px; font-weight: 800;
+            width: 22px; color: var(--text-sub);
         }
 
-        .upgrade-action-btn:disabled {
-            background: #101929; color: #3b4e6b;
-            box-shadow: none; cursor: not-allowed;
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+
+        .avatar-badge {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 800; color: #fff;
+        }
+
+        .leader-name { font-size: 12px; font-weight: 700; color: var(--text-main); }
+        .leader-val {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 11px; font-weight: 700; color: var(--accent-cyan);
         }
 
         /* Модули и Бустеры */
@@ -510,68 +445,7 @@
             text-align: center; min-height: 16px;
         }
 
-        /* Рейтинг Игроков */
-        .leaderboard-panel {
-            background: var(--panel-bg);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 20px;
-            padding: 16px;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-
-        .leaderboard-scroll {
-            max-height: 320px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding-right: 4px;
-        }
-
-        .leaderboard-scroll::-webkit-scrollbar { width: 4px; }
-        .leaderboard-scroll::-webkit-scrollbar-thumb { background: var(--accent-cyan); border-radius: 4px; }
-
-        .leader-row {
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--tile-bg);
-            padding: 10px 12px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            flex-shrink: 0;
-        }
-
-        .leader-row.me {
-            border-color: var(--accent-cyan);
-            background: rgba(0, 242, 254, 0.08);
-        }
-
-        .leader-left { display: flex; align-items: center; gap: 10px; }
-
-        .rank-num {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 12px; font-weight: 800;
-            width: 22px; color: var(--text-sub);
-        }
-
-        .rank-1 { color: #ffd700; }
-        .rank-2 { color: #c0c0c0; }
-        .rank-3 { color: #cd7f32; }
-
-        .avatar-badge {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 800; color: #fff;
-        }
-
-        .leader-name { font-size: 12px; font-weight: 700; color: var(--text-main); }
-        .leader-val {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 11px; font-weight: 700; color: var(--accent-cyan);
-        }
-
-        /* Полноэкранный оверлей загрузки рекламы с блюром */
+        /* Оверлей Загрузки Рекламы c Блюром */
         .ad-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -697,14 +571,13 @@
 
         <div id="statusMsg" class="status-output">Станция готова к работе</div>
 
-        <!-- Навигация (6 вкладок) -->
+        <!-- Навигация -->
         <div class="nav-tabs">
-            <button class="tab-btn active" id="tabCore" onclick="switchTab('core')">⚛️ Ядро</button>
-            <button class="tab-btn" id="tabWheel" onclick="switchTab('wheel')">🎰 Колесо</button>
-            <button class="tab-btn" id="tabUpgrade" onclick="switchTab('upgrade')">📈 Апгрейд</button>
-            <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">🔬 Модули</button>
-            <button class="tab-btn" id="tabTop" onclick="switchTab('top')">🏆 Топ</button>
-            <button class="tab-btn" id="tabBoost" onclick="switchTab('boost')">🎁 Бонусы</button>
+            <button class="tab-btn active" id="tabCore" onclick="switchTab('core')">⚛️ <span id="navCore">Ядро</span></button>
+            <button class="tab-btn" id="tabWheel" onclick="switchTab('wheel')">🎰 <span id="navWheel">Колесо</span></button>
+            <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">🔬 <span id="navShop">Модули</span></button>
+            <button class="tab-btn" id="tabTop" onclick="switchTab('top')">🏆 <span id="navTop">Топ</span></button>
+            <button class="tab-btn" id="tabBoost" onclick="switchTab('boost')">🎁 <span id="navBoost">Бонусы</span></button>
         </div>
 
         <!-- 1. ЯДРО (ГЕНЕРАТОР) -->
@@ -737,7 +610,7 @@
             </div>
         </div>
 
-        <!-- 2. КОЛЕСО ФОРТУНЫ -->
+        <!-- 2. КОЛЕСО ФОРТУНЫ (3 ТИПА) -->
         <div id="viewWheel" class="view-layer">
             <div class="wheel-container">
                 <div class="card-label" id="lblWheelTitle">Квантовый Рулетёр</div>
@@ -756,41 +629,7 @@
             </div>
         </div>
 
-        <!-- 3. ИГРА «АПГРЕЙДЕР» (ТОЛЬКО ЧИСТЫЕ % БЕЗ ИКСОВ И ЛОГИЧНЫЕ МНОЖИТЕЛИ) -->
-        <div id="viewUpgrade" class="view-layer">
-            <div class="upgrader-panel">
-                <div class="card-label">Квантовый Апгрейдер Снаряжения</div>
-                
-                <div class="upgrader-circle-wrap">
-                    <canvas id="upgraderCanvas"></canvas>
-                    <div class="upgrader-center-info">
-                        <div class="upgrader-chance" id="upgraderChanceText">50%</div>
-                        <div class="upgrader-chance-sub" id="upgraderChanceSub">Шанс успеха</div>
-                    </div>
-                </div>
-
-                <div class="upgrader-input-group">
-                    <div style="font-size: 10px; color: var(--text-sub); font-weight: 700;">Сумма ставки (✦):</div>
-                    <input type="number" id="upgradeBetInput" class="upgrader-input" value="100" min="1">
-                </div>
-
-                <div style="font-size: 10px; color: var(--text-sub); font-weight: 700; width: 100%; text-align: left;">Выберите шанс успеха:</div>
-                <div class="multiplier-grid">
-                    <button class="mult-btn" onclick="setMultiplier(10, 10)">10%</button>
-                    <button class="mult-btn" onclick="setMultiplier(25, 4)">25%</button>
-                    <button class="mult-btn" onclick="setMultiplier(33, 3)">33%</button>
-                    <button class="mult-btn active" onclick="setMultiplier(50, 2)">50%</button>
-                    <button class="mult-btn" onclick="setMultiplier(60, 1.66)">60%</button>
-                    <button class="mult-btn" onclick="setMultiplier(75, 1.33)">75%</button>
-                    <button class="mult-btn" onclick="setMultiplier(80, 1.25)">80%</button>
-                    <button class="mult-btn" onclick="setMultiplier(90, 1.11)">90%</button>
-                </div>
-
-                <button class="upgrade-action-btn" id="startUpgradeBtn" onclick="startUpgrade()">ЗАПУСТИТЬ АПГРЕЙД</button>
-            </div>
-        </div>
-
-        <!-- 4. МОДУЛИ СТАНЦИИ -->
+        <!-- 3. МОДУЛИ СТАНЦИИ -->
         <div id="viewShop" class="view-layer">
             <div class="panel-box">
                 <div class="card-label" id="lblModulesTitle">Автоматические Модули</div>
@@ -821,15 +660,15 @@
             </div>
         </div>
 
-        <!-- 5. РЕЙТИНГ ИГРОКОВ (10 МЕСТ С СКРОЛЛОМ)[span_0](start_span)[span_0](end_span) -->
+        <!-- 4. РЕЙТИНГ ИГРОКОВ -->
         <div id="viewTop" class="view-layer">
             <div class="leaderboard-panel">
-                <div class="card-label" id="lblTopTitle">Топ Исследователей (Топ 10)</div>
-                <div class="leaderboard-scroll" id="leaderList"></div>
+                <div class="card-label" id="lblTopTitle">Топ Исследователей</div>
+                <div id="leaderList"></div>
             </div>
         </div>
 
-        <!-- 6. РЕКЛАМНЫЕ БОНУСЫ -->
+        <!-- 5. РЕКЛАМНЫЕ БОНУСЫ -->
         <div id="viewBoost" class="view-layer">
             <div class="panel-box">
                 <div class="card-label" id="lblBoostTitle">Ускорители Станции</div>
@@ -850,7 +689,7 @@
 
     </div>
 
-    <!-- ПОЛНОЭКРАННЫЙ ОВЕРЛЕЙ ЗАГРУЗКИ РЕКЛАМЫ С БЛЮРОМ -->
+    <!-- Оверлей Загрузки Рекламы -->
     <div class="ad-overlay" id="adLoadingOverlay">
         <div class="ad-loader-card">
             <div class="ad-spinner"></div>
@@ -935,9 +774,16 @@
             draw();
         })();
 
-        // ADSGRAM & TELEGRAM
+        // ADSGRAM & TELEGRAM USER ID ПРЕФИКСЫ ДЛЯ РАЗНЫХ АККАУНТОВ
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) tg.expand();
+
+        let userId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) ? tg.initDataUnsafe.user.id : "local_user";
+        
+        // Функция для получения ключей localStorage с учетом ID аккаунта Telegram
+        function getStorageKey(key) {
+            return `ast_${userId}_${key}`;
+        }
 
         let adController = null;
 
@@ -949,54 +795,138 @@
             } catch (e) {}
         }
 
-        // МОСКОВСКОЕ ВРЕМЯ ДЛЯ СБРОСА СЧЁТЧИКА РЕКЛАМЫ В 00:00 ПО МСК
+        if (localStorage.getItem(getStorageKey('rq_ad_in_progress')) === 'true') {
+            localStorage.removeItem(getStorageKey('rq_ad_in_progress'));
+            setTimeout(() => {
+                document.getElementById('statusMsg').innerText = "⚠️ Просмотр прерван при перезагрузке!";
+            }, 400);
+        }
+
+        // ПОЛУЧЕНИЕ ТЕКУЩЕЙ ДАТЫ ПО МОСКВЕ (МСК) ДЛЯ СБРОСА В 00:00
         function getMoscowDateString() {
             return new Date().toLocaleDateString('ru-RU', { timeZone: 'Europe/Moscow' });
         }
 
-        // СОСТОЯНИЕ ИГРЫ
+        // СОСТОЯНИЕ ИГРЫ (УНИКАЛЬНОЕ ДЛЯ КАЖДОГО АККАУНТА TELEGRAM)
         let state = {
-            balance: parseInt(localStorage.getItem('ast_balance')) || 0,
-            clickPower: parseInt(localStorage.getItem('ast_click_pwr')) || 1,
-            autoIncome: parseInt(localStorage.getItem('ast_auto_pwr')) || 0,
-            clickLvl: parseInt(localStorage.getItem('ast_click_lvl')) || 1,
-            autoLvl: parseInt(localStorage.getItem('ast_auto_lvl')) || 0,
-            laserLvl: parseInt(localStorage.getItem('ast_laser_lvl')) || 0,
-            adsToday: parseInt(localStorage.getItem('ast_ads_today')) || 0,
-            adsTotal: parseInt(localStorage.getItem('ast_ads_total')) || 0,
-            lastDay: localStorage.getItem('ast_last_day') || getMoscowDateString(),
+            balance: parseInt(localStorage.getItem(getStorageKey('balance'))) || 0,
+            clickPower: parseInt(localStorage.getItem(getStorageKey('click_pwr'))) || 1,
+            autoIncome: parseInt(localStorage.getItem(getStorageKey('auto_pwr'))) || 0,
+            clickLvl: parseInt(localStorage.getItem(getStorageKey('click_lvl'))) || 1,
+            autoLvl: parseInt(localStorage.getItem(getStorageKey('auto_lvl'))) || 0,
+            laserLvl: parseInt(localStorage.getItem(getStorageKey('laser_lvl'))) || 0,
+            adsToday: parseInt(localStorage.getItem(getStorageKey('ads_today'))) || 0,
+            adsTotal: parseInt(localStorage.getItem(getStorageKey('ads_total'))) || 0,
+            lastDay: localStorage.getItem(getStorageKey('last_day')) || getMoscowDateString(),
             boostActive: false,
             boostTimeLeft: 0,
-            theme: localStorage.getItem('ast_theme') || 'standard',
-            lang: localStorage.getItem('ast_lang') || 'ru'
+            theme: localStorage.getItem(getStorageKey('theme')) || 'standard',
+            lang: localStorage.getItem(getStorageKey('lang')) || 'ru'
         };
 
-        // ПРОВЕРКА СМЕНЫ СУТОК ПО МСК
+        // ПРОВЕРКА СБРОСА «СЕГОДНЯ» ПО МСК
         let currentMoscowDate = getMoscowDateString();
         if (state.lastDay !== currentMoscowDate) {
             state.adsToday = 0;
             state.lastDay = currentMoscowDate;
-            localStorage.setItem('ast_last_day', state.lastDay);
-            localStorage.setItem('ast_ads_today', 0);
+            localStorage.setItem(getStorageKey('last_day'), state.lastDay);
+            localStorage.setItem(getStorageKey('ads_today'), 0);
         }
 
+        // ТАЙМЕРЫ КУЛДАУНА РЕКЛАМЫ
         let cooldowns = {
-            freeSpin: parseInt(localStorage.getItem('ast_cd_freeSpin')) || 0,
-            boost: parseInt(localStorage.getItem('ast_cd_boost')) || 0,
-            grant: parseInt(localStorage.getItem('ast_cd_grant')) || 0
+            freeSpin: parseInt(localStorage.getItem(getStorageKey('cd_freeSpin'))) || 0,
+            boost: parseInt(localStorage.getItem(getStorageKey('cd_boost'))) || 0,
+            grant: parseInt(localStorage.getItem(getStorageKey('cd_grant'))) || 0
         };
 
+        // ЯЗЫКОВОЙ СЛОВАРЬ (i18n)
+        const i18n = {
+            ru: {
+                energy: "Энергия Astra", ready: "Станция готова к работе",
+                navCore: "Ядро", navWheel: "Колесо", navShop: "Модули", navTop: "Топ", navBoost: "Бонусы",
+                boostActive: "Овердрайв Активен! Доход х2", wheelTitle: "Квантовый Рулетёр",
+                modulesTitle: "Автоматические Модули", m1: "Ионный Конденсатор", m2: "Орбитальный Сборщик", m3: "Квантовый Реактор",
+                topTitle: "Топ Исследователей", boostTitle: "Ускорители Станции",
+                b1Title: "⚡ Овердрайв (х2 Энергия)", b1Desc: "Удваивает мощность заряда ядра и генераторов на 60 секунд.",
+                b2Title: "🎁 Квантовый Грант (+1,000 ✦)", b2Desc: "Мгновенное начисление +1,000 энергии Astra за просмотр ролика.",
+                stgTitle: "⚙️ Настройки", stgTheme: "Тема оформления", stgLang: "Язык интерфейса", close: "Закрыть",
+                stdThm: "🌌 Стандартная", drkThm: "🌑 Тёмная", lgtThm: "☀️ Светлая",
+                sec: "/сек", lvl: "Ур.", charge: "к заряду"
+            },
+            ua: {
+                energy: "Енергія Astra", ready: "Станція готова до роботи",
+                navCore: "Ядро", navWheel: "Колесо", navShop: "Модулі", navTop: "Топ", navBoost: "Бонуси",
+                boostActive: "Овердрайв Активний! Дохід х2", wheelTitle: "Квантовий Рулетер",
+                modulesTitle: "Автоматичні Модулі", m1: "Іонний Конденсатор", m2: "Орбітальний Збирач", m3: "Квантовий Реактор",
+                topTitle: "Топ Дослідників", boostTitle: "Прискорювачі Станції",
+                b1Title: "⚡ Овердрайв (х2 Енергія)", b1Desc: "Подвоює потужність заряду ядра і генераторів на 60 секунд.",
+                b2Title: "🎁 Квантовий Грант (+1,000 ✦)", b2Desc: "Миттєве нарахування +1,000 енергії Astra за перегляд відео.",
+                stgTitle: "⚙️ Налаштування", stgTheme: "Тема оформлення", stgLang: "Мова інтерфейсу", close: "Закрити",
+                stdThm: "🌌 Стандартна", drkThm: "🌑 Темна", lgtThm: "☀️ Світла",
+                sec: "/сек", lvl: "Рів.", charge: "до заряду"
+            },
+            en: {
+                energy: "Astra Energy", ready: "Station Operational",
+                navCore: "Core", navWheel: "Wheel", navShop: "Modules", navTop: "Top", navBoost: "Boosts",
+                boostActive: "Overdrive Active! Income x2", wheelTitle: "Quantum Spinner",
+                modulesTitle: "Automatic Modules", m1: "Ionic Capacitor", m2: "Orbital Harvester", m3: "Quantum Reactor",
+                topTitle: "Top Explorers", boostTitle: "Station Boosters",
+                b1Title: "⚡ Overdrive (x2 Energy)", b1Desc: "Doubles core charge and generator power for 60 seconds.",
+                b2Title: "🎁 Quantum Grant (+1,000 ✦)", b2Desc: "Instant credit of +1,000 Astra energy for watching a video.",
+                stgTitle: "⚙️ Settings", stgTheme: "Theme", stgLang: "Language", close: "Close",
+                stdThm: "🌌 Standard", drkThm: "🌑 Dark", lgtThm: "☀️ Light",
+                sec: "/sec", lvl: "Lvl", charge: "charge"
+            }
+        };
+
+        function applyI18n() {
+            const t = i18n[state.lang] || i18n.ru;
+            document.getElementById('lblEnergy').innerText = t.energy;
+            document.getElementById('navCore').innerText = t.navCore;
+            document.getElementById('navWheel').innerText = t.navWheel;
+            document.getElementById('navShop').innerText = t.navShop;
+            document.getElementById('navTop').innerText = t.navTop;
+            document.getElementById('navBoost').innerText = t.navBoost;
+            document.getElementById('txtBoostActive').innerText = t.boostActive;
+            document.getElementById('lblWheelTitle').innerText = t.wheelTitle;
+            document.getElementById('lblModulesTitle').innerText = t.modulesTitle;
+            document.getElementById('m1Title').innerText = t.m1;
+            document.getElementById('m2Title').innerText = t.m2;
+            document.getElementById('m3Title').innerText = t.m3;
+            document.getElementById('lblTopTitle').innerText = t.topTitle;
+            document.getElementById('lblBoostTitle').innerText = t.boostTitle;
+            document.getElementById('b1Title').innerText = t.b1Title;
+            document.getElementById('b1Desc').innerText = t.b1Desc;
+            document.getElementById('b2Title').innerText = t.b2Title;
+            document.getElementById('b2Desc').innerText = t.b2Desc;
+
+            document.getElementById('stgTitle').innerText = t.stgTitle;
+            document.getElementById('stgThemeLabel').innerText = t.stgTheme;
+            document.getElementById('stgLangLabel').innerText = t.stgLang;
+            document.getElementById('stgCloseBtn').innerText = t.close;
+            document.getElementById('thmStdText').innerText = t.stdThm;
+            document.getElementById('thmDrkText').innerText = t.drkThm;
+            document.getElementById('thmLgtText').innerText = t.lgtThm;
+
+            document.getElementById('clickLvlText').innerText = `+1 ${t.charge} (${t.lvl} ${state.clickLvl})`;
+            document.getElementById('autoLvlText').innerText = `+1 ✦${t.sec} (${t.lvl} ${state.autoLvl})`;
+            document.getElementById('laserLvlText').innerText = `+5 ${t.charge} (${t.lvl} ${state.laserLvl})`;
+        }
+
         function syncUI() {
+            // Проверка смены суток по МСК при каждом открытии/действии
             let nowMoscow = getMoscowDateString();
             if (state.lastDay !== nowMoscow) {
                 state.adsToday = 0;
                 state.lastDay = nowMoscow;
-                localStorage.setItem('ast_last_day', state.lastDay);
-                localStorage.setItem('ast_ads_today', 0);
+                localStorage.setItem(getStorageKey('last_day'), state.lastDay);
+                localStorage.setItem(getStorageKey('ads_today'), 0);
             }
 
             document.getElementById('balanceVal').innerText = state.balance.toLocaleString();
-            document.getElementById('passiveVal').innerText = `+${state.autoIncome * (state.boostActive ? 2 : 1)} ✦/сек`;
+            const t = i18n[state.lang] || i18n.ru;
+            document.getElementById('passiveVal').innerText = `+${state.autoIncome * (state.boostActive ? 2 : 1)} ✦${t.sec}`;
             document.getElementById('adCounter').innerHTML = `Сегодня: ${state.adsToday}<br>Всего: ${state.adsTotal}`;
 
             let clickCost = Math.floor(10 * Math.pow(1.5, state.clickLvl - 1));
@@ -1015,14 +945,14 @@
             updateWheelButton();
             updateBoostButtonsText();
 
-            localStorage.setItem('ast_balance', state.balance);
-            localStorage.setItem('ast_click_pwr', state.clickPower);
-            localStorage.setItem('ast_auto_pwr', state.autoIncome);
-            localStorage.setItem('ast_click_lvl', state.clickLvl);
-            localStorage.setItem('ast_auto_lvl', state.autoLvl);
-            localStorage.setItem('ast_laser_lvl', state.laserLvl);
-            localStorage.setItem('ast_ads_today', state.adsToday);
-            localStorage.setItem('ast_ads_total', state.adsTotal);
+            localStorage.setItem(getStorageKey('balance'), state.balance);
+            localStorage.setItem(getStorageKey('click_pwr'), state.clickPower);
+            localStorage.setItem(getStorageKey('auto_pwr'), state.autoIncome);
+            localStorage.setItem(getStorageKey('click_lvl'), state.clickLvl);
+            localStorage.setItem(getStorageKey('auto_lvl'), state.autoLvl);
+            localStorage.setItem(getStorageKey('laser_lvl'), state.laserLvl);
+            localStorage.setItem(getStorageKey('ads_today'), state.adsToday);
+            localStorage.setItem(getStorageKey('ads_total'), state.adsTotal);
 
             updateLeaderboard();
         }
@@ -1031,12 +961,22 @@
             state.theme = thm;
             document.body.className = '';
             if (thm !== 'standard') document.body.classList.add('theme-' + thm);
-            localStorage.setItem('ast_theme', thm);
+
+            document.getElementById('thmStandard').classList.toggle('selected', thm === 'standard');
+            document.getElementById('thmDark').classList.toggle('selected', thm === 'dark');
+            document.getElementById('thmLight').classList.toggle('selected', thm === 'light');
+
+            localStorage.setItem(getStorageKey('theme'), thm);
         }
 
         function setLang(lng) {
             state.lang = lng;
-            localStorage.setItem('ast_lang', lng);
+            document.getElementById('langRu').classList.toggle('selected', lng === 'ru');
+            document.getElementById('langUa').classList.toggle('selected', lng === 'ua');
+            document.getElementById('langEn').classList.toggle('selected', lng === 'en');
+
+            localStorage.setItem(getStorageKey('lang'), lng);
+            applyI18n();
             syncUI();
         }
 
@@ -1081,9 +1021,7 @@
                 let cost = Math.floor(250 * Math.pow(1.7, state.laserLvl));
                 if (state.balance >= cost) { state.balance -= cost; state.clickPower += 5; state.laserLvl++; }
             }
-            document.getElementById('clickLvlText').innerText = `+1 к заряду (Ур. ${state.clickLvl})`;
-            document.getElementById('autoLvlText').innerText = `+1 ✦/сек (Ур. ${state.autoLvl})`;
-            document.getElementById('laserLvlText').innerText = `+5 к заряду (Ур. ${state.laserLvl})`;
+            applyI18n();
             syncUI();
         }
 
@@ -1101,14 +1039,28 @@
             document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
             document.getElementById('view' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
             if (tab === 'wheel') drawWheel(currentWheelRotation);
-            if (tab === 'upgrade') drawUpgrader(0, currentUpgradeChance);
         }
 
-        // КОЛЕСО ФОРТУНЫ
+        // КОЛЕСА ФОРТУНЫ (3 РЕЖИМА)
         const wheelConfigs = {
-            free: { cost: 0, isAd: true, prizes: [300, 25, 0, 150, 10, 50, 100, 0], colors: ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92'] },
-            medium: { cost: 100, isAd: false, prizes: [1000, 50, 0, 300, 20, 150, 500, 0], colors: ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92'] },
-            high: { cost: 1000, isAd: false, prizes: [10000, 500, 0, 3000, 200, 1500, 5000, 0], colors: ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92'] }
+            free: {
+                cost: 0,
+                isAd: true,
+                prizes: [300, 25, 0, 150, 10, 50, 100, 0],
+                colors: ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92']
+            },
+            medium: {
+                cost: 100,
+                isAd: false,
+                prizes: [1000, 50, 0, 300, 20, 150, 500, 0],
+                colors: ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92']
+            },
+            high: {
+                cost: 1000,
+                isAd: false,
+                prizes: [10000, 500, 0, 3000, 200, 1500, 5000, 0],
+                colors: ['#00f2fe', '#0052a5', '#09152a', '#0072ff', '#003e80', '#0f2447', '#00c6ff', '#004e92']
+            }
         };
 
         let currentWheelMode = 'medium';
@@ -1121,6 +1073,7 @@
             document.getElementById('wBtnFree').classList.toggle('active', mode === 'free');
             document.getElementById('wBtnMed').classList.toggle('active', mode === 'medium');
             document.getElementById('wBtnHigh').classList.toggle('active', mode === 'high');
+
             updateWheelButton();
             drawWheel(currentWheelRotation);
         }
@@ -1145,8 +1098,10 @@
         function setupWheelCanvas() {
             const cvs = document.getElementById('wheelCanvas');
             const dpr = window.devicePixelRatio || 1;
-            cvs.width = 230 * dpr; cvs.height = 230 * dpr;
-            cvs.style.width = '230px'; cvs.style.height = '230px';
+            cvs.width = 230 * dpr;
+            cvs.height = 230 * dpr;
+            cvs.style.width = '230px';
+            cvs.style.height = '230px';
             const ctx = cvs.getContext('2d');
             ctx.scale(dpr, dpr);
             return ctx;
@@ -1157,6 +1112,7 @@
             const cfg = wheelConfigs[currentWheelMode];
             const numSegments = cfg.prizes.length;
             const arc = (Math.PI * 2) / numSegments;
+
             ctx.clearRect(0, 0, 230, 230);
 
             for (let i = 0; i < numSegments; i++) {
@@ -1170,7 +1126,8 @@
                 ctx.save();
                 ctx.fillStyle = "#ffffff";
                 ctx.font = "800 11px Montserrat";
-                ctx.textAlign = "center"; ctx.textBaseline = "middle";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
                 let textAngle = startArc + arc / 2;
                 ctx.translate(115 + Math.cos(textAngle) * 70, 115 + Math.sin(textAngle) * 70);
                 ctx.rotate(textAngle + Math.PI / 2);
@@ -1190,15 +1147,22 @@
         function spinWheel(triggeredByAd = false) {
             const cfg = wheelConfigs[currentWheelMode];
             if (isSpinning) return;
+
             if (cfg.isAd && !triggeredByAd) {
                 if (cooldowns.freeSpin > 0) return;
                 watchAdReward('freeSpin');
                 return;
             }
+
             if (!cfg.isAd && state.balance < cfg.cost) return;
-            if (!cfg.isAd) { state.balance -= cfg.cost; syncUI(); }
+
+            if (!cfg.isAd) {
+                state.balance -= cfg.cost;
+                syncUI();
+            }
 
             isSpinning = true;
+
             const duration = 4000;
             const start = Date.now();
             const startAngle = currentWheelRotation;
@@ -1209,171 +1173,36 @@
             function animate() {
                 let elapsed = Date.now() - start;
                 let progress = Math.min(1, elapsed / duration);
+                
                 let easeProgress = 1 - Math.pow(1 - progress, 5);
                 currentWheelRotation = startAngle + (targetAngle - startAngle) * easeProgress;
+
                 drawWheel(currentWheelRotation);
 
                 if (progress < 1) {
                     requestAnimationFrame(animate);
                 } else {
                     isSpinning = false;
+                    
                     let normalizedAngle = (1.5 * Math.PI - currentWheelRotation) % (Math.PI * 2);
                     if (normalizedAngle < 0) normalizedAngle += Math.PI * 2;
                     let segmentIndex = Math.floor(normalizedAngle / ((Math.PI * 2) / cfg.prizes.length)) % cfg.prizes.length;
+                    
                     let prize = cfg.prizes[segmentIndex];
                     state.balance += prize;
-                    document.getElementById('statusMsg').innerText = prize > 0 ? `🎉 Выигрыш в колесе: +${prize} ✦!` : `🙁 Без выигрыша (0 ✦)`;
+                    document.getElementById('statusMsg').innerText = prize > 0 ? `🎉 Выигрыш в колесе: +${prize} ✦!` : `🙁 В этот раз без выигрыша (0 ✦)`;
                     syncUI();
                 }
             }
+
             requestAnimationFrame(animate);
         }
 
-        // АПГРЕЙДЕР С ТОЧНЫМИ И ЛОГИЧНЫМИ МНОЖИТЕЛЯМИ
-        let currentUpgradeChance = 50;
-        let currentUpgradeMultiplier = 2;
-        let isUpgrading = false;
-
-        function setMultiplier(chance, mult) {
-            if (isUpgrading) return;
-            currentUpgradeChance = chance;
-            currentUpgradeMultiplier = mult;
-            document.getElementById('upgraderChanceText').innerText = chance + "%";
-            document.querySelectorAll('.mult-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            drawUpgrader(0, currentUpgradeChance);
-        }
-
-        function setupUpgraderCanvas() {
-            const cvs = document.getElementById('upgraderCanvas');
-            const dpr = window.devicePixelRatio || 1;
-            cvs.width = 180 * dpr; cvs.height = 180 * dpr;
-            cvs.style.width = '180px'; cvs.style.height = '180px';
-            const ctx = cvs.getContext('2d');
-            ctx.scale(dpr, dpr);
-            return ctx;
-        }
-
-        function drawUpgrader(pointerAngle, chance) {
-            const ctx = setupUpgraderCanvas();
-            ctx.clearRect(0, 0, 180, 180);
-
-            // Фоновое серое кольцо
-            ctx.beginPath();
-            ctx.arc(90, 90, 75, 0, Math.PI * 2);
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
-            ctx.lineWidth = 10;
-            ctx.stroke();
-
-            // Синяя дуга шанса
-            let chanceAngle = (chance / 100) * (Math.PI * 2);
-            ctx.beginPath();
-            ctx.arc(90, 90, 75, -Math.PI / 2, -Math.PI / 2 + chanceAngle);
-            ctx.strokeStyle = "#00f2fe";
-            ctx.lineWidth = 10;
-            ctx.shadowBlur = 12;
-            ctx.shadowColor = "#00f2fe";
-            ctx.stroke();
-            ctx.shadowBlur = 0;
-
-            // Внутреннее заполнение
-            ctx.beginPath();
-            ctx.arc(90, 90, 58, 0, Math.PI * 2);
-            ctx.fillStyle = "#06101e";
-            ctx.fill();
-
-            // Синяя неоновая стрелка
-            ctx.save();
-            ctx.translate(90, 90);
-            ctx.rotate(pointerAngle);
-
-            ctx.beginPath();
-            ctx.moveTo(0, -78);
-            ctx.lineTo(-6, -56);
-            ctx.lineTo(6, -56);
-            ctx.closePath();
-            
-            let arrowGrad = ctx.createLinearGradient(0, -78, 0, -56);
-            arrowGrad.addColorStop(0, '#00f2fe');
-            arrowGrad.addColorStop(1, '#0072ff');
-            ctx.fillStyle = arrowGrad;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = '#00f2fe';
-            ctx.fill();
-            ctx.restore();
-        }
-
-        function startUpgrade() {
-            let betInput = document.getElementById('upgradeBetInput');
-            let bet = parseInt(betInput.value) || 0;
-
-            if (isUpgrading) return;
-            if (bet <= 0 || bet > state.balance) {
-                document.getElementById('statusMsg').innerText = "⚠️ Недостаточно средств для ставки!";
-                return;
-            }
-
-            state.balance -= bet;
-            syncUI();
-
-            isUpgrading = true;
-            let btn = document.getElementById('startUpgradeBtn');
-            btn.disabled = true;
-            document.getElementById('statusMsg').innerText = "🔄 Квантовый апгрейд запущен...";
-
-            let isWin = (Math.random() * 100) < currentUpgradeChance;
-
-            let finalAngleTarget;
-            if (isWin) {
-                let safeChanceMin = 2;
-                let safeChanceMax = Math.max(safeChanceMin, currentUpgradeChance - 2);
-                let randomWinPercent = safeChanceMin + Math.random() * (safeChanceMax - safeChanceMin);
-                finalAngleTarget = (randomWinPercent / 100) * (Math.PI * 2);
-            } else {
-                let failPercentMin = currentUpgradeChance + 3;
-                let failPercentMax = 97;
-                let randomFailPercent = failPercentMin + Math.random() * (failPercentMax - failPercentMin);
-                finalAngleTarget = (randomFailPercent / 100) * (Math.PI * 2);
-            }
-
-            let startTime = Date.now();
-            let duration = 12000; // Ровно 12 секунд долгой азартной прокрутки
-            let totalSpins = Math.PI * 2 * (10 + Math.floor(Math.random() * 5));
-            let startRotation = 0;
-            let targetRotation = startRotation + totalSpins + finalAngleTarget;
-
-            function animateUpgrade() {
-                let elapsed = Date.now() - startTime;
-                let progress = Math.min(1, elapsed / duration);
-                let ease = 1 - Math.pow(1 - progress, 4);
-
-                let currentAngle = startRotation + (targetRotation - startRotation) * ease;
-                drawUpgrader(currentAngle, currentUpgradeChance);
-
-                if (progress < 1) {
-                    requestAnimationFrame(animateUpgrade);
-                } else {
-                    isUpgrading = false;
-
-                    if (isWin) {
-                        let winAmount = Math.floor(bet * currentUpgradeMultiplier);
-                        state.balance += winAmount;
-                        document.getElementById('statusMsg').innerText = `🎉 Апгрейд успешен! Выигрыш: +${winAmount.toLocaleString()} ✦`;
-                    } else {
-                        document.getElementById('statusMsg').innerText = `💥 Апгрейд провален. Ставка сгорела.`;
-                    }
-                    btn.disabled = false;
-                    syncUI();
-                }
-            }
-
-            requestAnimationFrame(animateUpgrade);
-        }
-
-        // ОБНОВЛЕНИЕ ТЕКСТА КНОПОК БОНУСОВ
+        // ОБНОВЛЕНИЕ ТЕКСТА КНОПОК БОНУСОВ С УЧЕТОМ КУЛДАУНА
         function updateBoostButtonsText() {
             const btn1 = document.getElementById('boostBtn1');
             const btn2 = document.getElementById('boostBtn2');
+
             if (cooldowns.boost > 0) {
                 btn1.innerText = `Доступно через: ${cooldowns.boost} с`;
                 btn1.disabled = true;
@@ -1381,6 +1210,7 @@
                 btn1.innerText = "Активировать x2";
                 btn1.disabled = false;
             }
+
             if (cooldowns.grant > 0) {
                 btn2.innerText = `Доступно через: ${cooldowns.grant} с`;
                 btn2.disabled = true;
@@ -1393,35 +1223,42 @@
         // ТАЙМЕРЫ КУЛДАУНОВ
         setInterval(() => {
             let changed = false;
-            if (cooldowns.freeSpin > 0) { cooldowns.freeSpin--; localStorage.setItem('ast_cd_freeSpin', cooldowns.freeSpin); changed = true; }
-            if (cooldowns.boost > 0) { cooldowns.boost--; localStorage.setItem('ast_cd_boost', cooldowns.boost); changed = true; }
-            if (cooldowns.grant > 0) { cooldowns.grant--; localStorage.setItem('ast_cd_grant', cooldowns.grant); changed = true; }
-            if (changed) { updateWheelButton(); updateBoostButtonsText(); }
+            if (cooldowns.freeSpin > 0) {
+                cooldowns.freeSpin--;
+                localStorage.setItem(getStorageKey('cd_freeSpin'), cooldowns.freeSpin);
+                changed = true;
+            }
+            if (cooldowns.boost > 0) {
+                cooldowns.boost--;
+                localStorage.setItem(getStorageKey('cd_boost'), cooldowns.boost);
+                changed = true;
+            }
+            if (cooldowns.grant > 0) {
+                cooldowns.grant--;
+                localStorage.setItem(getStorageKey('cd_grant'), cooldowns.grant);
+                changed = true;
+            }
+
+            if (changed) {
+                updateWheelButton();
+                updateBoostButtonsText();
+            }
         }, 1000);
 
-        // ТОП 10 ИГРОКОВ (СИНХРОНИЗАЦИЯ С ТВОИМИ ИГРОКАМИ И GOOGLE ТАБЛИЦЕЙ)[span_1](start_span)[span_1](end_span)[span_2](start_span)[span_2](end_span)
-        const defaultFakePlayers = [
-            { name: "КОЛЛЕКТОР 🇹🇷", balance: 94025 },
-            { name: "Данил", balance: 60390 },
-            { name: "шура", balance: 41297 },
-            { name: "Jeep Си", balance: 29402 },
-            { name: "Sega", balance: 21858 },
-            { name: "рейт #флекс", balance: 9192 }
-        ];
-
+        // ОБЩИЙ ТОП ЧЕРЕЗ GOOGLE ТАБЛИЦУ (С ДЕДУПЛИКАЦИЕЙ)[span_0](start_span)[span_0](end_span)
         async function updateLeaderboard() {
-            const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) ? tg.initDataUnsafe.user.first_name : "Исследователь";
+            const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.first_name : "Исследователь";
             const API_URL = "https://script.google.com/macros/s/AKfycbzfwQStGp4CJuRYJzdea-_ifqfZOLIo1NMKZpUo6WBiGm7tUjNax8rDN1z0r0_2ztKEaQ/exec";
 
-            let rawPlayers = [...defaultFakePlayers];
+            let rawPlayers = [];
 
             try {
                 let response = await fetch(API_URL);
                 let data = await response.json();
-                if (data.players && data.players.length > 0) {
-                    rawPlayers = rawPlayers.concat(data.players);
-                }
-            } catch (e) {}
+                rawPlayers = data.players || [];
+            } catch (e) {
+                rawPlayers = [];
+            }
 
             let playerMap = {};
             rawPlayers.forEach(p => {
@@ -1442,7 +1279,7 @@
             }));
 
             players.sort((a, b) => b.balance - a.balance);
-            let top10 = players.slice(0, 10);
+            let top5 = players.slice(0, 5);
 
             try {
                 fetch(API_URL, {
@@ -1455,7 +1292,12 @@
             const container = document.getElementById('leaderList');
             container.innerHTML = '';
 
-            top10.forEach((p, index) => {
+            if (top5.length === 0) {
+                container.innerHTML = `<div style="text-align:center; font-size:11px; color:var(--text-sub); padding:10px;">Нет данных</div>`;
+                return;
+            }
+
+            top5.forEach((p, index) => {
                 let rank = index + 1;
                 let isMe = (p.name === userName);
                 let row = document.createElement('div');
@@ -1475,7 +1317,7 @@
             });
         }
 
-        // ADSGRAM REWARDED (С ПОЛНОЭКРАННЫМ БЛЮРОВАННЫМ ОВЕРЛЕЕМ ЗАГРУЗКИ)
+        // ADSGRAM REWARDED
         function watchAdReward(type) {
             if (type === 'freeSpin' && cooldowns.freeSpin > 0) return;
             if (type === 'boost' && cooldowns.boost > 0) return;
@@ -1483,39 +1325,45 @@
 
             const overlay = document.getElementById('adLoadingOverlay');
             const loaderText = document.getElementById('adLoaderText');
+            
             loaderText.innerText = "Реклама загружается, пожалуйста, подождите...";
             overlay.style.display = 'flex';
 
             if (!adController) {
-                try { if (window.Adsgram) adController = window.Adsgram.init({ blockId: "55380" }); } catch(e){}
+                try { 
+                    if (window.Adsgram) adController = window.Adsgram.init({ blockId: "55380" }); 
+                } catch(e){}
             }
 
             if (!adController) {
                 overlay.style.display = 'none';
-                document.getElementById('statusMsg').innerText = "⚠️ Рекламный модуль загружается...";
+                document.getElementById('statusMsg').innerText = "⚠️ Рекламный модуль загружается, попробуйте через секунду.";
                 return;
             }
 
-            localStorage.setItem('rq_ad_in_progress', 'true');
+            localStorage.setItem(getStorageKey('rq_ad_in_progress'), 'true');
 
             adController.show().then((result) => {
                 overlay.style.display = 'none';
-                localStorage.removeItem('rq_ad_in_progress');
+                localStorage.removeItem(getStorageKey('rq_ad_in_progress'));
 
                 if (result && result.done) {
                     state.adsToday++;
                     state.adsTotal++;
 
                     if (type === 'freeSpin') {
-                        cooldowns.freeSpin = 30; localStorage.setItem('ast_cd_freeSpin', 30);
+                        cooldowns.freeSpin = 30;
+                        localStorage.setItem(getStorageKey('cd_freeSpin'), 30);
                         document.getElementById('statusMsg').innerText = "🎰 Бесплатное вращение разблокировано! ✅";
                         spinWheel(true);
                     } else if (type === 'boost') {
-                        cooldowns.boost = 30; localStorage.setItem('ast_cd_boost', 30);
+                        cooldowns.boost = 30;
+                        localStorage.setItem(getStorageKey('cd_boost'), 30);
                         activateOverdrive();
                         document.getElementById('statusMsg').innerText = "🚀 Буст x2 активирован на 60 сек! ✅";
                     } else if (type === 'grant') {
-                        cooldowns.grant = 30; localStorage.setItem('ast_cd_grant', 30);
+                        cooldowns.grant = 30;
+                        localStorage.setItem(getStorageKey('cd_grant'), 30);
                         state.balance += 1000;
                         document.getElementById('statusMsg').innerText = "🎁 Получено +1,000 ✦! ✅";
                     }
@@ -1525,8 +1373,8 @@
                 }
             }).catch(() => {
                 overlay.style.display = 'none';
-                localStorage.removeItem('rq_ad_in_progress');
-                document.getElementById('statusMsg').innerText = "⚠️ Реклама сейчас недоступна.";
+                localStorage.removeItem(getStorageKey('rq_ad_in_progress'));
+                document.getElementById('statusMsg').innerText = "⚠️ Реклама сейчас недоступна. Попробуйте позже.";
             });
         }
 
@@ -1538,6 +1386,7 @@
             let timer = setInterval(() => {
                 state.boostTimeLeft--;
                 document.getElementById('boostTime').innerText = state.boostTimeLeft;
+
                 if (state.boostTimeLeft <= 0) {
                     clearInterval(timer);
                     state.boostActive = false;
@@ -1553,7 +1402,6 @@
         initAdsgram();
         syncUI();
         drawWheel(0);
-        drawUpgrader(0, currentUpgradeChance);
     </script>
 </body>
 </html>
