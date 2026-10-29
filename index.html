@@ -342,7 +342,7 @@
             box-shadow: none; cursor: not-allowed;
         }
 
-        /* Апгрейдер со стрелкой (чистые % без иксов) */
+        /* Апгрейдер со стрелкой */
         .upgrader-panel {
             background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -756,7 +756,7 @@
             </div>
         </div>
 
-        <!-- 3. ИГРА «АПГРЕЙДЕР» (ТОЛЬКО ЧИСТЫЕ % БЕЗ ИКСОВ И ЛОГИЧНЫЕ МНОЖИТЕЛИ) -->
+        <!-- 3. ИГРА «АПГРЕЙДЕР» -->
         <div id="viewUpgrade" class="view-layer">
             <div class="upgrader-panel">
                 <div class="card-label">Квантовый Апгрейдер Снаряжения</div>
@@ -821,7 +821,7 @@
             </div>
         </div>
 
-        <!-- 5. РЕЙТИНГ ИГРОКОВ (10 МЕСТ С СКРОЛЛОМ)[span_0](start_span)[span_0](end_span) -->
+        <!-- 5. РЕЙТИНГ ИГРОКОВ -->
         <div id="viewTop" class="view-layer">
             <div class="leaderboard-panel">
                 <div class="card-label" id="lblTopTitle">Топ Исследователей (Топ 10)</div>
@@ -947,6 +947,41 @@
                     adController = window.Adsgram.init({ blockId: "55380" });
                 }
             } catch (e) {}
+        }
+
+        // Умная предзагрузка контроллера с защитой от зависания первого ролика
+        function getAdController() {
+            return new Promise((resolve) => {
+                if (adController) {
+                    resolve(adController);
+                    return;
+                }
+                try {
+                    if (window.Adsgram) {
+                        adController = window.Adsgram.init({ blockId: "55380" });
+                        resolve(adController);
+                        return;
+                    }
+                } catch (e) {}
+
+                // Если SDK еще грузится, ждем секунду и пробуем снова
+                let attempts = 0;
+                let interval = setInterval(() => {
+                    attempts++;
+                    try {
+                        if (window.Adsgram) {
+                            adController = window.Adsgram.init({ blockId: "55380" });
+                            clearInterval(interval);
+                            resolve(adController);
+                            return;
+                        }
+                    } catch (e) {}
+                    if (attempts > 5) {
+                        clearInterval(interval);
+                        resolve(null);
+                    }
+                }, 300);
+            });
         }
 
         // МОСКОВСКОЕ ВРЕМЯ ДЛЯ СБРОСА СЧЁТЧИКА РЕКЛАМЫ В 00:00 ПО МСК
@@ -1229,7 +1264,7 @@
             requestAnimationFrame(animate);
         }
 
-        // АПГРЕЙДЕР С ТОЧНЫМИ И ЛОГИЧНЫМИ МНОЖИТЕЛЯМИ
+        // АПГРЕЙДЕР
         let currentUpgradeChance = 50;
         let currentUpgradeMultiplier = 2;
         let isUpgrading = false;
@@ -1258,14 +1293,12 @@
             const ctx = setupUpgraderCanvas();
             ctx.clearRect(0, 0, 180, 180);
 
-            // Фоновое серое кольцо
             ctx.beginPath();
             ctx.arc(90, 90, 75, 0, Math.PI * 2);
             ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
             ctx.lineWidth = 10;
             ctx.stroke();
 
-            // Синяя дуга шанса
             let chanceAngle = (chance / 100) * (Math.PI * 2);
             ctx.beginPath();
             ctx.arc(90, 90, 75, -Math.PI / 2, -Math.PI / 2 + chanceAngle);
@@ -1276,13 +1309,11 @@
             ctx.stroke();
             ctx.shadowBlur = 0;
 
-            // Внутреннее заполнение
             ctx.beginPath();
             ctx.arc(90, 90, 58, 0, Math.PI * 2);
             ctx.fillStyle = "#06101e";
             ctx.fill();
 
-            // Синяя неоновая стрелка
             ctx.save();
             ctx.translate(90, 90);
             ctx.rotate(pointerAngle);
@@ -1337,7 +1368,7 @@
             }
 
             let startTime = Date.now();
-            let duration = 12000; // Ровно 12 секунд долгой азартной прокрутки
+            let duration = 12000;
             let totalSpins = Math.PI * 2 * (10 + Math.floor(Math.random() * 5));
             let startRotation = 0;
             let targetRotation = startRotation + totalSpins + finalAngleTarget;
@@ -1399,7 +1430,7 @@
             if (changed) { updateWheelButton(); updateBoostButtonsText(); }
         }, 1000);
 
-        // ТОП 10 ИГРОКОВ (СИНХРОНИЗАЦИЯ С ТВОИМИ ИГРОКАМИ И GOOGLE ТАБЛИЦЕЙ)[span_1](start_span)[span_1](end_span)[span_2](start_span)[span_2](end_span)
+        // ТОП 10 ИГРОКОВ
         const defaultFakePlayers = [
             { name: "КОЛЛЕКТОР 🇹🇷", balance: 94025 },
             { name: "Данил", balance: 60390 },
@@ -1475,8 +1506,8 @@
             });
         }
 
-        // ADSGRAM REWARDED (С ПОЛНОЭКРАННЫМ БЛЮРОВАННЫМ ОВЕРЛЕЕМ ЗАГРУЗКИ)
-        function watchAdReward(type) {
+        // ADSGRAM REWARDED (С ПОЛНОЭКРАННЫМ БЛЮРОВАННЫМ ОВЕРЛЕЕМ И УМНОЙ ПРЕДЗАГРУЗКОЙ)
+        async function watchAdReward(type) {
             if (type === 'freeSpin' && cooldowns.freeSpin > 0) return;
             if (type === 'boost' && cooldowns.boost > 0) return;
             if (type === 'grant' && cooldowns.grant > 0) return;
@@ -1486,19 +1517,17 @@
             loaderText.innerText = "Реклама загружается, пожалуйста, подождите...";
             overlay.style.display = 'flex';
 
-            if (!adController) {
-                try { if (window.Adsgram) adController = window.Adsgram.init({ blockId: "55380" }); } catch(e){}
-            }
+            let controller = await getAdController();
 
-            if (!adController) {
+            if (!controller) {
                 overlay.style.display = 'none';
-                document.getElementById('statusMsg').innerText = "⚠️ Рекламный модуль загружается...";
+                document.getElementById('statusMsg').innerText = "⚠️ Рекламный модуль не отвечает, попробуйте еще раз.";
                 return;
             }
 
             localStorage.setItem('rq_ad_in_progress', 'true');
 
-            adController.show().then((result) => {
+            controller.show().then((result) => {
                 overlay.style.display = 'none';
                 localStorage.removeItem('rq_ad_in_progress');
 
